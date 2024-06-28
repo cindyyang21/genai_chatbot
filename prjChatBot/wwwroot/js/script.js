@@ -39,3 +39,10 @@ function sendMessage() {
         chatContent.scrollTop = chatContent.scrollHeight;
     }
 }
+
+document.getElementById('chat-input').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+    }
+});
