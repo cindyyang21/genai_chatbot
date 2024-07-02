@@ -1,4 +1,4 @@
-﻿@{
+﻿﻿@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -16,36 +16,81 @@
             <img src="@Url.Content("~/images/chatbot-icon.png")" alt="Chatbot" id="icon-img">
 
         </div>
-        <div id="chat-box" class="hidden">
-            <div id="chat-header">
-                <span>智能客服</span>
-            </div>
-            <div id="chat-content">
-                <div class="message bot">您好，有什麼我可以幫助您的嗎？</div>
-                <!-- 更多對話可以在這裡添加 -->
-            </div>
-            <div id="chat-input-area">
-                <button id="menu-button" onclick="toggleMenu()">☰</button>
-                <input type="text" id="chat-input" placeholder="輸入您的訊息....">
-                <button id="send-button" onclick="sendMessage()">傳送</button>
-            </div>
-            <div id="menu-box" class="hidden">
-                <table border="1">
-                    <tr>
-                        <td><div class="menu-item">選項1</div></td>
-                        <td><div class="menu-item">選項2</div></td>
-                        <td><div class="menu-item">選項3</div></td>
-                    </tr>
-                    <tr>
-                        <td><div class="menu-item">選項4</div></td>
-                        <td><div class="menu-item">選項5</div></td>
-                        <td><div class="menu-item">選項6</div></td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-    </div>
 
-    <script src="~/js/script.js"></script>
+
+
+        <div id="chat-box" class="hidden">
+
+            <iframe src="https://www.chatbase.co/chatbot-iframe/auLUWxUuclbBLXUP8GrWQ"
+                    width="100%"
+                    style="height: 70%; min-height: 550px"
+                    frameborder="0"></iframe>
+
+
+
+            <script>
+                window.embeddedChatbotConfig = {
+                    chatbotId: "auLUWxUuclbBLXUP8GrWQ",
+                    domain: "www.chatbase.co"
+                }
+            </script>
+            <script>
+                src = "https://www.chatbase.co/embed.min.js"
+                chatbotId = "auLUWxUuclbBLXUP8GrWQ"
+                domain = "www.chatbase.co"
+                defer
+            </script>
+
+            @*           <div id="chat-input-area">
+                    <button id="menu-button" onclick="toggleMenu()">☰</button>
+                    <input type="text" id="chat-input" placeholder="輸入您的訊息...">
+                    <button id="send-button" onclick="sendMessage()">傳送</button>
+                </div>
+                <div id="menu-box" class="hidden">
+                    <table border="1">
+                        <tr>
+                            <td><div class="menu-item">選項1</div></td>
+                            <td><div class="menu-item">選項2</div></td>
+                            <td><div class="menu-item">選項3</div></td>
+                        </tr>
+                        <tr>
+                            <td><div class="menu-item">選項4</div></td>
+                            <td><div class="menu-item">選項5</div></td>
+                            <td><div class="menu-item">選項6</div></td>
+                        </tr>
+                    </table>
+                </div> *@
+
+            @*  <div id="chat-box" class="hidden">
+                    <div id="chat-header">
+                        <span>智能客服</span>
+                    </div>
+                    <div id="chat-content">
+                        <div class="message bot">您好，有什麼我可以幫助您的嗎？</div>
+                        <!-- 更多對話可以在這裡添加 -->
+                    </div>
+                    <div id="chat-input-area">
+                        <button id="menu-button" onclick="toggleMenu()">☰</button>
+                        <input type="text" id="chat-input" placeholder="輸入您的訊息...">
+                        <button id="send-button" onclick="sendMessage()">傳送</button>
+                    </div>
+                    <div id="menu-box" class="hidden">
+                        <table border="1">
+                            <tr>
+                                <td><div class="menu-item">選項1</div></td>
+                                <td><div class="menu-item">選項2</div></td>
+                                <td><div class="menu-item">選項3</div></td>
+                            </tr>
+                            <tr>
+                                <td><div class="menu-item">選項4</div></td>
+                                <td><div class="menu-item">選項5</div></td>
+                                <td><div class="menu-item">選項6</div></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div> *@
+        </div>
+
+        <script src="~/js/script.js"></script>
 </body>
 </html>
