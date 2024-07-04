@@ -71,6 +71,12 @@ td, tr {
     align-items: center;
 }
 
+#refresh-icon {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
 #chat-content {
     flex: 1;
     padding: 10px;

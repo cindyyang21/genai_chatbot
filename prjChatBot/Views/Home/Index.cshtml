@@ -18,8 +18,10 @@
         </div>
         <div id="chat-box" class="hidden">
             <div id="chat-header">
-                <span>智能客服</span>
+                <span>桃園好農</span>
+                <img src="@Url.Content("~/images/refresh-icon.png")" alt="Refresh" id="refresh-icon" onclick="refreshChat()">
             </div>
+
             <div id="chat-content">
                 <div class="message bot">您好，有什麼我可以幫助您的嗎？</div>
                 <!-- 更多對話可以在這裡添加 -->
@@ -32,16 +34,17 @@
             <div id="menu-box" class="hidden">
                 <table border="1">
                     <tr>
-                        <td><div class="menu-item">選項1</div></td>
-                        <td><div class="menu-item">選項2</div></td>
-                        <td><div class="menu-item">選項3</div></td>
+                        <td><div class="menu-item" onclick="sendMenuItemMessage(this)">選項1</div></td>
+                        <td><div class="menu-item" onclick="sendMenuItemMessage(this)">選項2</div></td>
+                        <td><div class="menu-item" onclick="sendMenuItemMessage(this)">選項3</div></td>
                     </tr>
                     <tr>
-                        <td><div class="menu-item">選項4</div></td>
-                        <td><div class="menu-item">選項5</div></td>
-                        <td><div class="menu-item">選項6</div></td>
+                        <td><div class="menu-item" onclick="sendMenuItemMessage(this)">選項4</div></td>
+                        <td><div class="menu-item" onclick="sendMenuItemMessage(this)">選項5</div></td>
+                        <td><div class="menu-item" onclick="sendMenuItemMessage(this)">選項6</div></td>
                     </tr>
                 </table>
+
             </div>
         </div>
     </div>

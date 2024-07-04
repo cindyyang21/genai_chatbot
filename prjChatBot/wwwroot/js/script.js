@@ -22,6 +22,13 @@ function toggleMenu() {
     }
 }
 
+function sendMenuItemMessage(element) {
+    const chatInput = document.getElementById('chat-input');
+    chatInput.value = element.innerText;
+    sendMessage();
+}
+
+
 function sendMessage() {
     const chatInput = document.getElementById('chat-input');
     const chatContent = document.getElementById('chat-content');
@@ -55,6 +62,18 @@ chatContent.scrollTop = chatContent.scrollHeight;
         }, 1000);
     }
 }
+
+function refreshChat() {
+    const chatContent = document.getElementById('chat-content');
+    chatContent.innerHTML = ''; // 清空對話內容
+
+    // 添加最初的 Message bot 訊息
+    const initialBotMessage = document.createElement('div');
+    initialBotMessage.classList.add('message', 'bot');
+    initialBotMessage.innerText = '您好，有什麼我可以幫助您的嗎？';
+    chatContent.appendChild(initialBotMessage);
+}
+
 
 document.getElementById('chat-input').addEventListener('keydown', function (e) {
     if (e.key === 'Enter') {
