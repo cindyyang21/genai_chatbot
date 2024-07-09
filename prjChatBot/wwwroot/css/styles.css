@@ -91,6 +91,27 @@ td, tr {
     margin-bottom: 10px;
 }
 
+/* 產品卡片樣式 */
+.card {
+    margin: 10px auto;
+    text-align: center;
+}
+
+.card-img-top {
+    width: 100%;
+    height: auto;
+}
+
+.carousel-control-prev-icon, .carousel-control-next-icon {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
 .bot {
     background-color: #e0e0e0;
     align-self: flex-start;

@@ -10,6 +10,7 @@
     <title>智能客服機器人</title>
     <link rel="stylesheet" href="~/css/styles.css">
 </head>
+
 <body>
     <div id="chatbot">
         <div id="chat-icon" onclick="toggleChat()">
@@ -24,6 +25,55 @@
 
             <div id="chat-content">
                 <div class="message bot">您好，有什麼我可以幫助您的嗎？</div>
+                <div class="message bot">以下為精選商品，提供您參考!</div>
+                <div id="cardCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <div class="card" style="width: 25rem; margin: auto;">
+                                <img src="@Url.Content("~/images/XiuCaiOolongTea.jpg")" class="card-img-top" alt="XiuCaiOolongTea">
+                                <div class="card-body">
+                                    <h5 class="card-title">秀才烏龍茶</h5>
+                                </div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item"><a href="https://taoyuanchoice.tycg.gov.tw/Home/ProductDetail/d241036c-8095-4dc9-a7ba-0e443d0b373b#gsc.tab=0" class="card-link">產品資訊</a></li>
+                                    <li class="list-group-item"><a href="#" class="card-link">購買連結</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <div class="card" style="width: 25rem; margin: auto;">
+                                <img src="@Url.Content("~/images/CharocoalRoasstedBlackTea.jpg")" class="card-img-top" alt="CharocoalRoasstedBlackTea">
+                                <div class="card-body">
+                                    <h5 class="card-title">碳花紅茶</h5>
+                                </div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item"><a href="https://taoyuanchoice.tycg.gov.tw/Home/ProductDetail/86c48593-71da-4eda-8152-923a18ce74bc#gsc.tab=0" class="card-link">產品資訊</a></li>
+                                    <li class="list-group-item"><a href="#" class="card-link">購買連結</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <div class="card" style="width: 25rem; margin: auto;">
+                                <img src="@Url.Content("~/images/XiuCaiBlackTea.jpg")" class="card-img-top" alt="XiuCaiBlackTea">
+                                <div class="card-body">
+                                    <h5 class="card-title">秀才紅茶</h5>
+                                </div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item"><a href="https://taoyuanchoice.tycg.gov.tw/Home/ProductDetail/4c3b708b-6d2f-4280-b01e-a964eb698a73#gsc.tab=0" class="card-link">產品資訊</a></li>
+                                    <li class="list-group-item"><a href="#" class="card-link">購買連結</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#cardCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#cardCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
                 <!-- 更多對話可以在這裡添加 -->
             </div>
             <div id="chat-input-area">
