@@ -1,0 +1,7 @@
+[build]
+builder = "dockerfile"
+dockerfilePath = "./prjChatBot/Dockerfile"
+
+[deploy]
+startCommand = "dotnet prjChatBot.dll"
+restartPolicyType = "never"
