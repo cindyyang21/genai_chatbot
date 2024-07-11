@@ -5,7 +5,19 @@ body {
     padding: 0;
     box-sizing: border-box;
 }
+.bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    /*z-index: -999;*/
+}
 
+.bg img {
+        min-height: 100%;
+        width: 100%;
+}
 table {
     border-collapse: collapse; /* 確保邊框折疊 */
     width: 100%; /* 使表格寬度適應父元素 */
