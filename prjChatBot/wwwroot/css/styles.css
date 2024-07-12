@@ -5,6 +5,7 @@ body {
     padding: 0;
     box-sizing: border-box;
 }
+
 .bg {
     position: fixed;
     top: 0;
@@ -14,14 +15,14 @@ body {
     /*z-index: -999;*/
 }
 
-.bg img {
+    .bg img {
         min-height: 100%;
         width: 100%;
-}
+    }
+
 table {
     border-collapse: collapse; /* 確保邊框折疊 */
     width: 100%; /* 使表格寬度適應父元素 */
-
 }
 
 td, tr {
@@ -101,6 +102,16 @@ td, tr {
     padding: 10px;
     border-radius: 10px;
     margin-bottom: 10px;
+}
+
+.feedback-container {
+    font-size: small;
+    color: grey;
+}
+
+.feedback-icon {
+    cursor: pointer;
+    margin-left: 10px; /* 添加左右空格 */
 }
 
 /* 產品卡片樣式 */
@@ -198,6 +209,7 @@ td, tr {
     #chat-input-area {
         padding: 5px; /* 減小內邊距以適應小屏幕 */
     }
+
     #chat-icon {
         width: 50px;
         height: 50px;

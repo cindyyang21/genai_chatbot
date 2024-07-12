@@ -33,32 +33,61 @@ function sendMessage() {
     const chatInput = document.getElementById('chat-input');
     const chatContent = document.getElementById('chat-content');
 
- if (chatInput.value.trim() !== '') {
-    const userMessage = document.createElement('div');
-    userMessage.classList.add('message', 'user');
-    userMessage.innerText = chatInput.value;
-    chatContent.appendChild(userMessage);
+    if (chatInput.value.trim() !== '') {
+        const userMessage = document.createElement('div');
+        userMessage.classList.add('message', 'user');
+        userMessage.innerText = chatInput.value;
+        chatContent.appendChild(userMessage);
 
-// 清空輸入框
-chatInput.value = '';
+        // 清空輸入框
+        chatInput.value = '';
 
-// 自動滾動到最新訊息
-chatContent.scrollTop = chatContent.scrollHeight;
+        // 自動滾動到最新訊息
+        chatContent.scrollTop = chatContent.scrollHeight;
 
-// 模拟机器人回应
-setTimeout(() => {
-    const botMessage = document.createElement('div');
-    botMessage.classList.add('message', 'bot');
+        // 模拟机器人回应
+        setTimeout(() => {
+            const botMessage = document.createElement('div');
+            botMessage.classList.add('message', 'bot');
 
-    const botText = document.createElement('span');
-    botText.innerText = '我不知道你在說什麼';
+            const botText = document.createElement('span');
+            botText.innerText = '我不知道你在說什麼';
 
-    botMessage.appendChild(botText);
+            botMessage.appendChild(botText);
 
-    chatContent.appendChild(botMessage);
+            chatContent.appendChild(botMessage);
 
-// 自动滚动到最新消息
-chatContent.scrollTop = chatContent.scrollHeight;
+            // 添加小字及讚和倒讚
+            const feedbackContainer = document.createElement('div');
+            feedbackContainer.classList.add('feedback-container');
+
+            const feedbackText = document.createElement('span');
+            feedbackText.innerText = '這回答是否對你有幫助?';
+
+            const thumbsUp = document.createElement('span');
+            thumbsUp.innerText = '👍'; // 讚的表情符號
+            thumbsUp.classList.add('feedback-icon');
+            thumbsUp.addEventListener('click', () => {
+                alert('感謝您的反饋！');
+                // 在此处可以添加更多处理逻辑，例如记录反馈
+            });
+
+            const thumbsDown = document.createElement('span');
+            thumbsDown.innerText = '👎'; // 倒讚的表情符號
+            thumbsDown.classList.add('feedback-icon');
+            thumbsDown.addEventListener('click', () => {
+                alert('感謝您的反饋！');
+                // 在此处可以添加更多处理逻辑，例如记录反馈
+            });
+
+            feedbackContainer.appendChild(feedbackText);
+            feedbackContainer.appendChild(thumbsUp);
+            feedbackContainer.appendChild(thumbsDown);
+
+            chatContent.appendChild(feedbackContainer);
+
+            // 自动滚动到最新消息
+            chatContent.scrollTop = chatContent.scrollHeight;
         }, 1000);
     }
 }
