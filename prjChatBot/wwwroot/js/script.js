@@ -11,8 +11,6 @@
     }
 }
 
-
-
 function toggleMenu() {
     const menuBox = document.getElementById('menu-box');
     if (menuBox.style.display === 'none' || menuBox.style.display === '') {
@@ -28,7 +26,6 @@ function sendMenuItemMessage(element) {
     sendMessage();
 }
 
-
 function sendMessage() {
     const chatInput = document.getElementById('chat-input');
     const chatContent = document.getElementById('chat-content');
@@ -40,55 +37,104 @@ function sendMessage() {
         chatContent.appendChild(userMessage);
 
         // 清空輸入框
+        const userMessageText = chatInput.value;
         chatInput.value = '';
 
         // 自動滾動到最新訊息
         chatContent.scrollTop = chatContent.scrollHeight;
 
-        // 模拟机器人回应
-        setTimeout(() => {
-            const botMessage = document.createElement('div');
-            botMessage.classList.add('message', 'bot');
+        // 调用sendRequest函数来处理API请求
+        sendRequest(userMessageText);
+    }
+}
 
-            const botText = document.createElement('span');
-            botText.innerText = '我不知道你在說什麼';
+async function sendRequest(message) {
+    const url = 'http://localhost:3000/bot/8948ae93-ed70-44e9-9217-376c22b7a4ac/api';
+    const apiKey = 'sk_db_I1kNRZPCU92bhzeGVvzyKbaesqzMM2nT';
+    const data = {
+        message: message,
+        history: [],
+        stream: true
+    };
 
-            botMessage.appendChild(botText);
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-api-key': apiKey
+            },
+            body: JSON.stringify(data)
+        });
 
-            chatContent.appendChild(botMessage);
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
 
-            // 添加小字及讚和倒讚
-            const feedbackContainer = document.createElement('div');
-            feedbackContainer.classList.add('feedback-container');
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder('utf-8');
+        let responseText = '';
+        let historyContent = '';
 
-            const feedbackText = document.createElement('span');
-            feedbackText.innerText = '這回答是否對你有幫助?';
+        while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            responseText += decoder.decode(value, { stream: true });
+            const events = responseText.split('\n\n');
+            events.forEach(eventString => {
+                if (eventString.trim() !== '') {
+                    const eventParts = eventString.split('\n');
+                    const event = eventParts[0].replace('event: ', '');
+                    const data = JSON.parse(eventParts[1].replace('data: ', ''));
+                    if (event === 'result' && data.bot) {
+                        const botMessage = document.createElement('div');
+                        botMessage.classList.add('message', 'bot');
+                        botMessage.innerText = data.bot.text;
+                        document.getElementById('chat-content').appendChild(botMessage);
 
-            const thumbsUp = document.createElement('span');
-            thumbsUp.innerText = '👍'; // 讚的表情符號
-            thumbsUp.classList.add('feedback-icon');
-            thumbsUp.addEventListener('click', () => {
-                alert('感謝您的反饋！');
-                // 在此处可以添加更多处理逻辑，例如记录反馈
+                        // 添加反馈功能
+                        const feedbackContainer = document.createElement('div');
+                        feedbackContainer.classList.add('feedback-container');
+
+                        const feedbackText = document.createElement('span');
+                        feedbackText.innerText = '這回答是否對你有幫助?';
+
+                        const thumbsUp = document.createElement('span');
+                        thumbsUp.innerText = '👍';
+                        thumbsUp.classList.add('feedback-icon');
+                        thumbsUp.addEventListener('click', () => {
+                            alert('感謝您的反饋！');
+                        });
+
+                        const thumbsDown = document.createElement('span');
+                        thumbsDown.innerText = '👎';
+                        thumbsDown.classList.add('feedback-icon');
+                        thumbsDown.addEventListener('click', () => {
+                            alert('感謝您的反饋！');
+                        });
+
+                        feedbackContainer.appendChild(feedbackText);
+                        feedbackContainer.appendChild(thumbsUp);
+                        feedbackContainer.appendChild(thumbsDown);
+
+                        document.getElementById('chat-content').appendChild(feedbackContainer);
+
+                        // 自动滚动到最新消息
+                        document.getElementById('chat-content').scrollTop = document.getElementById('chat-content').scrollHeight;
+                        historyContent = data.history.map(item => `${item.type}: ${item.text}`).join('\n');
+                        document.getElementById('history').innerText = historyContent;
+
+
+
+                        // 自动滚动到最新消息
+                        document.getElementById('chat-content').scrollTop = document.getElementById('chat-content').scrollHeight;
+                    }
+                }
             });
-
-            const thumbsDown = document.createElement('span');
-            thumbsDown.innerText = '👎'; // 倒讚的表情符號
-            thumbsDown.classList.add('feedback-icon');
-            thumbsDown.addEventListener('click', () => {
-                alert('感謝您的反饋！');
-                // 在此处可以添加更多处理逻辑，例如记录反馈
-            });
-
-            feedbackContainer.appendChild(feedbackText);
-            feedbackContainer.appendChild(thumbsUp);
-            feedbackContainer.appendChild(thumbsDown);
-
-            chatContent.appendChild(feedbackContainer);
-
-            // 自动滚动到最新消息
-            chatContent.scrollTop = chatContent.scrollHeight;
-        }, 1000);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('botResponse').innerText = error;
     }
 }
 
@@ -102,7 +148,6 @@ function refreshChat() {
     initialBotMessage.innerText = '您好，有什麼我可以幫助您的嗎？';
     chatContent.appendChild(initialBotMessage);
 }
-
 
 document.getElementById('chat-input').addEventListener('keydown', function (e) {
     if (e.key === 'Enter') {
