@@ -40,6 +40,13 @@ function sendMessage() {
         const userMessageText = chatInput.value;
         chatInput.value = '';
 
+        // 顯示點點點動畫
+        const typingIndicator = document.createElement('div');
+        typingIndicator.classList.add('message', 'bot', 'typing-indicator');
+        typingIndicator.id = 'typing-indicator';
+        typingIndicator.innerHTML = '<span></span><span></span><span></span>';
+        chatContent.appendChild(typingIndicator);
+
         // 自動滾動到最新訊息
         chatContent.scrollTop = chatContent.scrollHeight;
 
@@ -87,6 +94,12 @@ async function sendRequest(message) {
                     const event = eventParts[0].replace('event: ', '');
                     const data = JSON.parse(eventParts[1].replace('data: ', ''));
                     if (event === 'result' && data.bot) {
+                        // 移除「輸入中...」的符號
+                        const typingIndicator = document.getElementById('typing-indicator');
+                        if (typingIndicator) {
+                            typingIndicator.remove();
+                        }
+
                         const botMessage = document.createElement('div');
                         botMessage.classList.add('message', 'bot');
                         botMessage.innerText = data.bot.text;
