@@ -57,7 +57,7 @@ function sendMessage() {
 
 async function sendRequest(message) {
     const url = 'http://localhost:3000/bot/bd041136-3064-4b6f-a160-1481f399d8be/api';
-    const apiKey = 'sk_db_EJ46Jcto2qIsxWwPLav3WLY8JYm2iuMQ';
+    const apiKey = 'sk_db_lCcVzycHcVVngXKEHuby3muiQSP3Pami';
     const data = {
         message: message,
         history: [],
