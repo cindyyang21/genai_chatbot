@@ -57,8 +57,8 @@ function sendMessage() {
 }
 
 async function sendRequest(message) {
-    const url = 'http://localhost:3000/bot/bd041136-3064-4b6f-a160-1481f399d8be/api';
-    const apiKey = 'sk_db_reCVt4ul5uNF70MVBjFUrrMfue4E4PsZ';
+    const url = 'https://dialoqbase-production-ceea.up.railway.app/bot/e452c6d2-b980-451b-9ff3-2be65a95c945/api';
+    const apiKey = 'sk_db_E84HThPFXNNcp9nCI0DNUGGgeg1qt8Sa';
     const data = {
         message: message,
         history: [],
@@ -104,6 +104,13 @@ async function sendRequest(message) {
                         const botMessage = document.createElement('div');
                         botMessage.classList.add('message', 'bot');
                         botMessage.innerHTML = marked.parse(data.bot.text); // 使用 marked.js 解析 Markdown
+
+                        //所有超連結另開分頁
+                        const links = botMessage.querySelectorAll('a');
+                        links.forEach(link => {
+                            link.setAttribute('target', '_blank');
+                        });
+
                         document.getElementById('chat-content').appendChild(botMessage);
 
                         // 添加反馈功能
