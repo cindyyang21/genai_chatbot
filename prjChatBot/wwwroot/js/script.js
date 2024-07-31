@@ -213,7 +213,7 @@ function refreshChat() {
     link1b.href = 'https://shopee.tw/%E3%80%90%E5%8F%8C%E9%9C%96%E8%8C%B6%E8%8E%8A%E3%80%91%E7%A7%80%E6%89%8D%E7%83%8F%E9%BE%8D%E8%8C%B6-%F0%9F%94%A5%E9%BE%8D%E7%9C%BC%E6%9C%A8%E6%85%A2%E7%83%98%F0%9F%94%A5-%E9%A6%99%E6%B0%A3%E5%AE%9C%E4%BA%BA-i.4010690.4810134291?sp_atk=d9990eb6-6b8a-467f-bd09-cdf4f0073305&xptdk=d9990eb6-6b8a-467f-bd09-cdf4f0073305';
     link1b.classList.add('card-link');
     link1b.innerText = '購買連結';
-    link1a.target = '_blank';
+    link1b.target = '_blank';
     listItem1b.appendChild(link1b);
     listGroup1.appendChild(listItem1a);
     listGroup1.appendChild(listItem1b);
@@ -248,7 +248,7 @@ function refreshChat() {
     link2a.href = 'https://taoyuanchoice.tycg.gov.tw/Home/ProductDetail/86c48593-71da-4eda-8152-923a18ce74bc#gsc.tab=0';
     link2a.classList.add('card-link');
     link2a.innerText = '產品資訊';
-    link1a.target = '_blank';
+    link2a.target = '_blank';
     listItem2a.appendChild(link2a);
     const listItem2b = document.createElement('li');
     listItem2b.classList.add('list-group-item');
@@ -256,7 +256,7 @@ function refreshChat() {
     link2b.href = 'https://shopee.tw/-%E5%8F%8C%E9%9C%96%E8%8C%B6%E8%8E%8A-%F0%9F%94%A5%E7%A2%B3%E8%8A%B1%E7%B4%85%E8%8C%B6%F0%9F%94%A5(%E4%B9%85%E6%B3%A1%E4%B8%8D%E8%8B%A6%E6%BE%80%EF%BC%8C%E5%8F%A3%E6%84%9F%E6%BF%83%E9%9F%BB)-%E5%8D%81%E5%A4%A7%E4%BC%B4%E6%89%8B%E7%A6%AE-%E5%8F%B0%E7%81%A3%E7%B4%85%E8%8C%B6-%E5%9C%A8%E5%9C%B0%E9%A2%A8%E5%91%B3%E8%8C%B6-i.4010690.25265500225?xptdk=5048ca95-b95f-4340-9266-b397a334b3ac';
     link2b.classList.add('card-link');
     link2b.innerText = '購買連結';
-    link1a.target = '_blank';
+    link2b.target = '_blank';
     listItem2b.appendChild(link2b);
     listGroup2.appendChild(listItem2a);
     listGroup2.appendChild(listItem2b);
@@ -291,7 +291,7 @@ function refreshChat() {
     link3a.href = 'https://taoyuanchoice.tycg.gov.tw/Home/ProductDetail/4c3b708b-6d2f-4280-b01e-a964eb698a73#gsc.tab=0';
     link3a.classList.add('card-link');
     link3a.innerText = '產品資訊';
-    link1a.target = '_blank';
+    link3a.target = '_blank';
     listItem3a.appendChild(link3a);
     const listItem3b = document.createElement('li');
     listItem3b.classList.add('list-group-item');
@@ -299,7 +299,7 @@ function refreshChat() {
     link3b.href = 'https://shopee.tw/-%E5%8F%8C%E9%9C%96%E8%8C%B6%E8%8E%8A-2023-%E6%98%A5%E8%8C%B6%F0%9F%94%A5%E7%A7%80%E6%89%8D%E7%B4%85%E8%8C%B6%F0%9F%94%A5(%E4%B9%85%E6%B3%A1%E4%B8%8D%E8%8B%A6%E6%BE%80)-%E5%8D%81%E5%A4%A7%E4%BC%B4%E6%89%8B%E7%A6%AE-%E5%8F%B0%E7%81%A3%E7%B4%85%E8%8C%B6-%E5%9C%A8%E5%9C%B0%E9%A2%A8%E5%91%B3%E8%8C%B6-i.4010690.23045180005?xptdk=51150d59-eda2-4b0f-9e63-61793dbf180d';
     link3b.classList.add('card-link');
     link3b.innerText = '購買連結';
-    link1a.target = '_blank';
+    link3b.target = '_blank';
     listItem3b.appendChild(link3b);
     listGroup3.appendChild(listItem3a);
     listGroup3.appendChild(listItem3b);
