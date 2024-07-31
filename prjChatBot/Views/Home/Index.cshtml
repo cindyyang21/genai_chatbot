@@ -1,4 +1,5 @@
-﻿@{
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -8,22 +9,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>智能客服機器人</title>
-    <link rel="stylesheet" href="~/css/styles.css">
+    <link rel="stylesheet" href="~/css/styles.css" asp-append-version="true">
 </head>
 
 <body>
     <div class="bg">
-        <img src="/images/taoyuan.png">
+        <img src="/images/taoyuan.png" asp-append-version="true">
     </div>
     <div id="chatbot">
         <div id="chat-icon" onclick="toggleChat()">
-            <img src="@Url.Content("~/images/chatbot-icon.png")" alt="Chatbot" id="icon-img">
+            <img src="@Url.Content("~/images/chatbot-icon.png")" alt="Chatbot" id="icon-img" asp-append-version="true">
 
         </div>
         <div id="chat-box" class="hidden">
             <div id="chat-header">
                 <span>桃園好農</span>
-                <img src="@Url.Content("~/images/refresh-icon.png")" alt="Refresh" id="refresh-icon" onclick="refreshChat()">
+                <img src="@Url.Content("~/images/refresh-icon.png")" alt="Refresh" id="refresh-icon" onclick="refreshChat()" asp-append-version="true">
             </div>
 
             <div id="chat-content">
@@ -33,7 +34,7 @@
                     <div class="carousel-inner">
                         <div class="carousel-item active">
                             <div class="card" style="width: 25rem; margin: auto;">
-                                <img src="@Url.Content("~/images/XiuCaiOolongTea.png")" class="card-img-top" alt="XiuCaiOolongTea">
+                                <img src="@Url.Content("~/images/XiuCaiOolongTea.png")" class="card-img-top" alt="XiuCaiOolongTea" asp-append-version="true">
                                 <div class="card-body">
                                     <h5 class="card-title">秀才烏龍茶</h5>
                                 </div>
@@ -45,7 +46,7 @@
                         </div>
                         <div class="carousel-item">
                             <div class="card" style="width: 25rem; margin: auto;">
-                                <img src="@Url.Content("~/images/CharocoalRoasstedBlackTea.png")" class="card-img-top" alt="CharocoalRoasstedBlackTea">
+                                <img src="@Url.Content("~/images/CharocoalRoasstedBlackTea.png")" class="card-img-top" alt="CharocoalRoasstedBlackTea" asp-append-version="true">
                                 <div class="card-body">
                                     <h5 class="card-title">碳花紅茶</h5>
                                 </div>
@@ -57,7 +58,7 @@
                         </div>
                         <div class="carousel-item">
                             <div class="card" style="width: 25rem; margin: auto;">
-                                <img src="@Url.Content("~/images/XiuCaiBlackTea.png")" class="card-img-top" alt="XiuCaiBlackTea">
+                                <img src="@Url.Content("~/images/XiuCaiBlackTea.png")" class="card-img-top" alt="XiuCaiBlackTea" asp-append-version="true">
                                 <div class="card-body">
                                     <h5 class="card-title">秀才紅茶</h5>
                                 </div>
@@ -102,7 +103,7 @@
         </div>
     </div>
 
-    <script src="~/js/script.js"></script>
+    <script src="~/js/script.js" asp-append-version="true"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </body>
 </html>
