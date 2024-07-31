@@ -24,6 +24,7 @@ function sendMenuItemMessage(element) {
     const chatInput = document.getElementById('chat-input');
     chatInput.value = element.innerText;
     sendMessage();
+    toggleMenu();
 }
 
 function sendMessage() {
