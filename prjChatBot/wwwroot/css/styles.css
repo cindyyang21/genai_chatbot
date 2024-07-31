@@ -278,7 +278,7 @@ td, tr {
 /* 響應式調整 */
 @media (max-width: 540px) {
     #chat-box {
-        width: 80vw; /* 使用百分比寬度來適應不同螢幕 */
+        width: 85vw; /* 使用百分比寬度來適應不同螢幕 */
         right: 10vw; /* 確保對話框在視窗右邊留出一點空間 */
         height: 90vh; /* 調整高度以適應小屏幕 */
     }
@@ -289,6 +289,10 @@ td, tr {
 
     #chat-input-area {
         padding: 5px; /* 減小內邊距以適應小屏幕 */
+    }
+
+    #send-button, #menu-button {
+        padding: 6px;
     }
 
     #chat-icon {
@@ -304,9 +308,16 @@ td, tr {
             #chat-icon img[src="/images/close-icon.png"] {
                 width: 40px; /* 根据需要调整宽度 */
                 height: 40px; /* 根据需要调整高度 */
-                margin-left: 6px;
+                margin-left: 4vw;
                 margin-top: 7px;
             }
+
+  #cardCarousel {
+      width: 80vw;
+  }
+
+ 
+
     /* 點點點動畫樣式 */
     .typing-indicator {
         display: flex;
