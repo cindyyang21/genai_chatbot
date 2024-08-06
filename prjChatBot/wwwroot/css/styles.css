@@ -170,8 +170,11 @@ td, tr {
     cursor: pointer;
 }
 
+.carousel-control-next-icon {
+    margin-bottom: 3px;
+}
 
-.bot {
+    .bot {
     background-color: #f5d8e3;
     color: black;
     align-self: flex-start;
@@ -317,12 +320,30 @@ td, tr {
                 margin-top: 7px;
             }
 
-  #cardCarousel {
-      width: 80vw;
-  }
+    .card-img-top {
+        width: 80%;
+        height: 100%;
+    }
 
- 
+    .list-group-item {
+        width: 75%;
+        
+    }
 
+    .card-title {
+        font-size: 30px;
+        width: 80vw;
+        text-align: center;
+    }
+
+ #menu-box {
+     width: 95%;
+ }
+
+ .menu-item {
+     width: 20vw;
+     font-size: 17px;
+ }
     /* 點點點動畫樣式 */
     .typing-indicator {
         display: flex;
