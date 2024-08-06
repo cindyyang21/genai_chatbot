@@ -235,6 +235,11 @@ td, tr {
     display: inline-block; /* 以行內塊顯示 */
 }
 
+.menu-icon {
+    width: 60px;
+    height: 60px;
+}
+
 /* 點點點動畫樣式 */
 .typing-indicator {
     display: flex;
