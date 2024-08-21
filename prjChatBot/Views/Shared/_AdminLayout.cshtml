@@ -1,0 +1,115 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewData["Title"] Admin後台管理系統</title>
+
+    <link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+
+    <style>
+        .form-group {
+            margin-top: 10px;
+        }
+
+        .header-bar {
+            background-color: #ef79a0;
+            color: white;
+            padding: 0 15px;
+            display: flex;
+            align-items: center;
+            height: 50px;
+            line-height: 50px;
+        }
+
+            .header-bar h4 {
+                margin: 0;
+                flex-grow: 1;
+                text-align: center; /* 標題靠中間 */
+            }
+
+        aside {
+            background-color: white;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .nav-item {
+            background-color: white;
+            border: 1px solid #ccc; /* 增加邊框 */
+        }
+
+    </style>
+
+</head>
+
+
+
+<body>
+    <div class="container-fluid">
+        <!-- 標題和導覽列按鈕 -->
+        <div class="row">
+            <div class="header-bar">
+                <nav class="navbar navbar-expand-lg navbar-light">
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </nav>
+                <h4>Admin後台管理系統</h4>
+            </div>
+        </div>
+
+        <div class="row">
+            <aside class="col-md-2">
+                <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="Index">首頁</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="MemberAccount">帳號權限管理</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="Information">店家/產品資訊</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="MemberList">店家資訊維護</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="MemberCreate">產品資訊維護</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="Statics">統計數據</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="Feedback">智能客服回饋</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-action="MemberCreate">操作歷程管理</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Home" asp-action="Logout">登出</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </aside>
+            <div class="col-md-10 content-area">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+
+    <footer class="border-top text-muted mt-3">
+        <div class="container mt-3">
+            &copy; @DateTime.Now.Year - Admin後台管理系統建置by <a href="#">Vincent</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    @RenderSection("Scripts", required: false)
+
+</body>
+</html>

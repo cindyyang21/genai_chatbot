@@ -57,8 +57,8 @@ function sendMessage() {
 }
 
 async function sendRequest(message) {
-    const url = 'https://dialoqbase-production-ceea.up.railway.app/bot/e452c6d2-b980-451b-9ff3-2be65a95c945/api';
-    const apiKey = 'sk_db_E84HThPFXNNcp9nCI0DNUGGgeg1qt8Sa';
+    const url = 'http://localhost:3000/bot/bd041136-3064-4b6f-a160-1481f399d8be/api';
+    const apiKey = 'sk_db_reCVt4ul5uNF70MVBjFUrrMfue4E4PsZ';
     const data = {
         message: message,
         history: [],
@@ -124,14 +124,14 @@ async function sendRequest(message) {
                         thumbsUp.innerText = '👍';
                         thumbsUp.classList.add('feedback-icon');
                         thumbsUp.addEventListener('click', () => {
-                            alert('感謝您的反饋！');
+                            openModal('up');
                         });
 
                         const thumbsDown = document.createElement('span');
                         thumbsDown.innerText = '👎';
                         thumbsDown.classList.add('feedback-icon');
                         thumbsDown.addEventListener('click', () => {
-                            alert('感謝您的反饋！');
+                            openModal('down');
                         });
 
                         feedbackContainer.appendChild(feedbackText);
@@ -139,6 +139,133 @@ async function sendRequest(message) {
                         feedbackContainer.appendChild(thumbsDown);
 
                         document.getElementById('chat-content').appendChild(feedbackContainer);
+
+                        // 創建模態彈窗
+                        const modal = document.createElement('div');
+                        modal.classList.add('modal');
+                        modal.style.display = 'none'; // 初始隱藏
+
+                        const modalContent = document.createElement('div');
+                        modalContent.classList.add('modal-content');
+
+                        const modalHeader = document.createElement('div');
+                        modalHeader.classList.add('modal-header');
+                        const closeButton = document.createElement('span');
+                        closeButton.classList.add('close');
+                        closeButton.innerHTML = '&times;';
+                        closeButton.onclick = () => closeModal();
+                        const modalTitle = document.createElement('h2');
+
+                        modalHeader.appendChild(closeButton);
+                        modalHeader.appendChild(modalTitle);
+
+                        const modalBody = document.createElement('div');
+                        modalBody.classList.add('modal-body');
+
+                        // 添加提示文本
+                        const feedbackPrompt = document.createElement('p');
+                        modalBody.appendChild(feedbackPrompt);
+
+                        const checkboxContainer = document.createElement('div');
+                        checkboxContainer.classList.add('checkbox-container');
+
+                        modalBody.appendChild(checkboxContainer);
+
+                        const modalFooter = document.createElement('div');
+                        modalFooter.classList.add('modal-footer');
+                        const submitButton = document.createElement('button');
+                        submitButton.classList.add('submit-btn');
+                        submitButton.innerText = '提交';
+                        submitButton.onclick = () => {
+                            const checkedOptions = [];
+                            checkboxContainer.querySelectorAll('input:checked').forEach(checkbox => {
+                                checkedOptions.push(checkbox.value);
+                            });
+                            if (checkedOptions.length > 0) {
+                                alert('感謝您的反饋!');
+                            } else {
+                                alert('請選擇至少一個選項。');
+                            }
+                            closeModal();
+                        };
+
+                        modalFooter.appendChild(submitButton);
+
+                        modalContent.appendChild(modalHeader);
+                        modalContent.appendChild(modalBody);
+                        modalContent.appendChild(modalFooter);
+
+                        modal.appendChild(modalContent);
+                        document.body.appendChild(modal);
+
+                        // 開啟彈窗
+                        function openModal(type) {
+                            let reasons = [];
+                            if (type === 'up') {
+                                modalTitle.innerText = '感謝您的支持！';
+                                feedbackPrompt.innerText = '請給予我們反饋：';
+                                feedbackPrompt.style.marginBottom = '5px';
+                                reasons = [
+                                    '智能客服回覆有解決問題',
+                                    '智能客服使用穩定不會中斷',
+                                    '智能客服操作介面簡單直覺好上手',
+                                    '智能客服解決問題速度快',
+                                    '智能客服回覆資料正確',
+                                    '其他'
+                                ];
+                            } else if (type === 'down') {
+                                modalTitle.innerText = '很抱歉未能幫助到您!';
+                                feedbackPrompt.innerText = '請告訴我們原因：';
+                                feedbackPrompt.style.marginBottom = '5px';
+                                reasons = [
+                                    '智能客服回覆沒有解決問題',
+                                    '智能客服使用不穩定會中斷',
+                                    '智能客服操作介面困難不易上手',
+                                    '智能客服解決問題速度慢',
+                                    '智能客服回覆資料錯誤',
+                                    '其他'
+                                ];
+                            }
+
+                            // 清除以前的選項
+                            checkboxContainer.innerHTML = '';
+
+                            // 創建兩個列容器
+                            const column1 = document.createElement('div');
+                            const column2 = document.createElement('div');
+                            column1.style.width = '50%';
+                            column1.style.float = 'left';
+                            column2.style.width = '50%';
+                            column2.style.float = 'left';
+
+                            // 添加新的選項到兩個列容器中
+                            reasons.forEach((reason, index) => {
+                                const label = document.createElement('label');
+                                const checkbox = document.createElement('input');
+                                checkbox.type = 'checkbox';
+                                checkbox.value = reason;
+                                label.appendChild(checkbox);
+                                label.appendChild(document.createTextNode(reason));
+
+                                if (index < Math.ceil(reasons.length / 2)) {
+                                    column1.appendChild(label);
+                                } else {
+                                    column2.appendChild(label);
+                                }
+                            });
+
+                            // 將兩列容器添加到checkboxContainer中
+                            checkboxContainer.appendChild(column1);
+                            checkboxContainer.appendChild(column2);
+
+                            modal.style.display = 'block';
+                        }
+
+                        // 關閉彈窗
+                        function closeModal() {
+                            modal.style.display = 'none';
+                        }
+
 
                         // 自动滚动到最新消息
                         document.getElementById('chat-content').scrollTop = document.getElementById('chat-content').scrollHeight;

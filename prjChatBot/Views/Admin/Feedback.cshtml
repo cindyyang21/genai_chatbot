@@ -1,0 +1,67 @@
+﻿
+@{
+    ViewData["Title"] = "Feedback";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+  <style>
+       @@media (min-width: 990px) {
+        .chart-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+  </style>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="d-flex justify-content-center">
+            <div style="position: relative;height: 400px;width: 400px;bottom: 50px;">
+                <canvas id="myChart" width="1092" height="1092" style="display: block; box-sizing: border-box; height: 546px; width: 546px;"></canvas>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 引入 Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+
+<script>
+    const chartElement = document.getElementById('myChart');
+    new Chart(chartElement, {
+        type: 'pie',
+            data: {
+                labels: [
+                    '智能客服回覆有解決問題',
+                    '智能客服使用穩定不會中斷',
+                    '智能客服操作介面簡單直覺好上手',
+                    '智能客服解決問題速度快',
+                    '智能客服回覆資料正確',
+                    '其他',
+                ],
+                datasets: [{
+                    label: '智能客服體驗👍',
+                    data: [30, 18, 15, 20, 7, 10],
+                }]
+            },
+        options: {
+            plugins: {
+                tooltip: { // hover
+                    callbacks: {
+                        label: function (context) {
+                            return ` ${context.parsed} %`; // 想顯示的內容
+                        }
+                    }
+            },
+            legend: {
+                display: true,
+                position: 'left' // 將圖例放在左方
+            }
+        }
+       }
+    });
+</script>
