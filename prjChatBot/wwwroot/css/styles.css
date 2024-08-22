@@ -34,30 +34,34 @@ td, tr {
 #chatbot {
     position: fixed;
     bottom: 20px;
-    right: 20px;
+    right: 2%;
     z-index: 1000;
     display: flex;
     align-items: flex-end;
 }
 
 #chat-icon {
-    width: 60px;
-    height: 60px;
+    display: inline-block;
+    max-width: 100%;
+    height: auto;
     cursor: pointer;
     z-index: 1001; /* 保證圖示在最上層 */
 }
 
     #chat-icon img {
         width: 100%;
-        height: 100%;
+        height: auto;
+        margin-left: 16%;
+        margin-bottom:5%;
     }
 
-        #chat-icon img[src="/images/close-icon.png"] {
-            width: 47px; /* 根据需要调整宽度 */
-            height: 47px; /* 根据需要调整高度 */
-            margin-left: 7px;
-            margin-top: 8px;
-        }
+
+    #chat-icon img[src="/images/close-icon.png"] {
+        display: inline-block;
+        max-width: 100%;
+        height: auto;
+        margin-left: 7px;
+    }
 
 /* 聊天框樣式 */
 #chat-box {
@@ -228,10 +232,8 @@ td, tr {
     text-align: center;
 }
 
-
 .card-img-top {
-    width: 100%;
-    height: auto;
+    margin:0;
 }
 
 .list-group-item {
@@ -391,39 +393,37 @@ td, tr {
     }
 
     #send-button, #menu-button {
-        padding: 6px;
+        padding: 3px;
+        margin-left: 3px;
     }
 
+
     #chat-icon {
-        width: 50px;
-        height: 50px;
+        width: 80%;
+        height: auto;
     }
 
         #chat-icon img {
             width: 100%;
-            height: 100%;
+            height: auto;
+            margin-left: 40%;
         }
 
             #chat-icon img[src="/images/close-icon.png"] {
-                width: 40px; /* 根据需要调整宽度 */
-                height: 40px; /* 根据需要调整高度 */
-                margin-left: 4vw;
-                margin-top: 7px;
+                width: 80%;
+                height: auto;
+                margin-left: 40%;
+                margin-bottom:20%;
             }
 
-    .card-img-top {
-        width: 80%;
-        height: 100%;
-    }
-
     .list-group-item {
-        width: 75%;
+        width: 100%;
         
     }
 
     .card-title {
-        font-size: 30px;
-        width: 80vw;
+        font-size: 40px;
+        width: 100%;
         text-align: center;
     }
 
