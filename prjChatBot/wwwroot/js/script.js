@@ -261,6 +261,11 @@ async function sendRequest(message) {
                                     otherText.style.width = '100%';
                                     otherText.style.boxSizing = 'border-box';
 
+                                    // 設置只顯示下邊框
+                                    otherText.style.border = 'none';           // 先隱藏所有邊框
+                                    otherText.style.borderBottom = '1px solid #000'; // 顯示下邊框，可以根據需要更改顏色和寬度
+
+
                                     const breakLine = document.createElement('br'); // 新增換行符
                                     label.appendChild(breakLine);
                                     label.appendChild(otherText);
