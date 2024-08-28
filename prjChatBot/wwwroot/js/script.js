@@ -227,6 +227,8 @@ async function sendRequest(message) {
                                 ];
                             }
 
+
+
                             // 清除以前的選項
                             checkboxContainer.innerHTML = '';
 
@@ -244,8 +246,35 @@ async function sendRequest(message) {
                                 const checkbox = document.createElement('input');
                                 checkbox.type = 'checkbox';
                                 checkbox.value = reason;
+
                                 label.appendChild(checkbox);
                                 label.appendChild(document.createTextNode(reason));
+
+                                if (reason === '其他') {
+                                    const otherText = document.createElement('input');
+                                    otherText.type = 'text';
+                                    otherText.placeholder = '請輸入其他原因';
+                                    otherText.style.visibility = 'hidden'; // 初始隱藏
+                                    label.appendChild(otherText);
+
+                                    // 設置響應式寬度和邊框盒模型
+                                    otherText.style.width = '100%';
+                                    otherText.style.boxSizing = 'border-box';
+
+                                    const breakLine = document.createElement('br'); // 新增換行符
+                                    label.appendChild(breakLine);
+                                    label.appendChild(otherText);
+
+                                    // 監聽「其他」選項變化
+                                    checkbox.addEventListener('change', () => {
+                                        if (checkbox.checked) {
+                                            otherText.style.visibility = 'visible';
+                                            otherText.value = '';
+                                        } else {
+                                            otherText.style.visibility = 'hidden';
+                                        }
+                                    });
+                                }
 
                                 if (index < Math.ceil(reasons.length / 2)) {
                                     column1.appendChild(label);
@@ -317,7 +346,8 @@ function refreshChat() {
     carouselItem1.classList.add('carousel-item', 'active');
     const card1 = document.createElement('div');
     card1.classList.add('card');
-    card1.style.width = '25rem';
+    card1.style.width = '100%';
+    card1.style.height = 'auto';
     card1.style.margin = 'auto';
     const img1 = document.createElement('img');
     img1.src = '/images/XiuCaiOolongTea.png';
@@ -360,7 +390,8 @@ function refreshChat() {
     carouselItem2.classList.add('carousel-item');
     const card2 = document.createElement('div');
     card2.classList.add('card');
-    card2.style.width = '25rem';
+    card2.style.width = '100%';
+    card2.style.height = 'auto';
     card2.style.margin = 'auto';
     const img2 = document.createElement('img');
     img2.src = '/images/CharocoalRoasstedBlackTea.png';
@@ -403,7 +434,8 @@ function refreshChat() {
     carouselItem3.classList.add('carousel-item');
     const card3 = document.createElement('div');
     card3.classList.add('card');
-    card3.style.width = '25rem';
+    card3.style.width = '100%';
+    card3.style.height = 'auto';
     card3.style.margin = 'auto';
     const img3 = document.createElement('img');
     img3.src = '/images/XiuCaiBlackTea.png';
