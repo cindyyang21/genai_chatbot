@@ -1,0 +1,17 @@
+﻿@model prjChatBot.Models.Menu
+@{
+    ViewData["Title"] = "Menu";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>Menu</h1>
+
+@if (Model != null)
+{
+    <img src="@Model.ImagePath" alt="Uploaded Image" />
+    <p>@Model.TextContent</p>
+}
+else
+{
+    <p>目前沒有上傳的內容。</p>
+}

@@ -1,7 +1,13 @@
+using Microsoft.EntityFrameworkCore;
+using prjChatBot.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 //var port = Environment.GetEnvironmentVariable("PORT") ?? "8081";
 //builder.WebHost.UseUrls($"http://*:{port}");
+
+builder.Services.AddDbContext<GeoDbContext>(
+    options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

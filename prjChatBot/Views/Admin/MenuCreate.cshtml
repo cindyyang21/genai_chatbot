@@ -1,0 +1,35 @@
+﻿@model prjChatBot.Models.Menu
+
+@{
+    ViewData["Title"] = "MenuCreate";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<style>
+    #textContent{
+        margin-top:10px;
+    }
+    a{
+        text-decoration:none;
+    }
+</style>
+<h1>MenuCreate</h1>
+<div>
+    <a asp-action="Menu">返回選單</a>
+</div>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Upload" asp-controller="Content" method="post" enctype="multipart/form-data">
+            <label for="imageFile">上傳圖片:</label>
+            <input type="file" name="imageFile" id="imageFile" />
+
+            <label for="textContent">文字內容:</label>
+            <textarea name="textContent" id="textContent"></textarea>
+
+            <button type="submit">上傳</button>
+        </form>
+    </div>
+</div>
+
+
