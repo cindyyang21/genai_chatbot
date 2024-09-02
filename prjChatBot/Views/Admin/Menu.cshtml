@@ -3,8 +3,13 @@
     ViewData["Title"] = "Menu";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
-
+<style>
+    a{
+      text-decoration:none;
+    }
+</style>
 <h1>Menu</h1>
+<a href="MenuCreate">新增</a>
 
 @if (Model != null)
 {
