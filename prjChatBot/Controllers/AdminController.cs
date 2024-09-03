@@ -59,11 +59,60 @@ namespace prjChatBot.Controllers
             if (imageFile != null && imageFile.Length > 0)
             {
                 var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
-                var fileName = Path.GetRandomFileName().Replace(".", "") + Path.GetExtension(imageFile.FileName);
+                var fileExtension = Path.GetExtension(imageFile.FileName).ToLowerInvariant();
+                var fileName = Path.GetRandomFileName().Replace(".", "") + fileExtension; // 保留原始文件扩展名
+                var filePath = Path.Combine(uploadPath, fileName);
 
-                using (var stream = new FileStream(Path.Combine(uploadPath, fileName), FileMode.Create))
+                using (var stream = imageFile.OpenReadStream())
                 {
-                    await imageFile.CopyToAsync(stream);
+                    using (var image = System.Drawing.Image.FromStream(stream))
+                    {
+                        // 设置最大宽度和高度
+                        int maxWidth = 800;
+                        int maxHeight = 600;
+
+                        // 计算比例并调整大小
+                        var ratioX = (double)maxWidth / image.Width;
+                        var ratioY = (double)maxHeight / image.Height;
+                        var ratio = Math.Min(ratioX, ratioY);
+
+                        var newWidth = (int)(image.Width * ratio);
+                        var newHeight = (int)(image.Height * ratio);
+
+                        Bitmap resizedImage;
+
+                        if (fileExtension == ".png")
+                        {
+                            // 对于 PNG 格式，保留透明背景
+                            resizedImage = new Bitmap(newWidth, newHeight, PixelFormat.Format32bppArgb);
+                            using (var graphics = Graphics.FromImage(resizedImage))
+                            {
+                                graphics.CompositingQuality = CompositingQuality.HighQuality;
+                                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                                graphics.SmoothingMode = SmoothingMode.HighQuality;
+                                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+                                graphics.Clear(Color.Transparent); // 保持透明背景
+                                graphics.DrawImage(image, 0, 0, newWidth, newHeight);
+                            }
+                            resizedImage.Save(filePath, ImageFormat.Png); // 保存为 PNG 格式
+                        }
+                        else
+                        {
+                            // 对于非 PNG 格式，正常处理
+                            resizedImage = new Bitmap(newWidth, newHeight);
+                            using (var graphics = Graphics.FromImage(resizedImage))
+                            {
+                                graphics.CompositingQuality = CompositingQuality.HighQuality;
+                                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                                graphics.SmoothingMode = SmoothingMode.HighQuality;
+                                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+                                graphics.DrawImage(image, 0, 0, newWidth, newHeight);
+                            }
+                            resizedImage.Save(filePath, ImageFormat.Jpeg); // 保存为 JPEG 格式或其他适当格式
+                        }
+                    }
                 }
 
                 var menu = _context.Menus.FirstOrDefault(m => m.Name == menuName);
@@ -88,7 +137,6 @@ namespace prjChatBot.Controllers
             }
 
             return RedirectToAction("Menu");
-
         }
 
 
