@@ -5,13 +5,11 @@ using System.Collections.Generic;
 
 namespace prjChatBot.Models;
 
-public partial class Menu
+public partial class Icon
 {
     public int Id { get; set; }
 
-    public string ImageFileName { get; set; }
-
-    public string TextContent { get; set; }
+    public string Icon1 { get; set; }
 
     public DateTime? CreatedAt { get; set; }
 }

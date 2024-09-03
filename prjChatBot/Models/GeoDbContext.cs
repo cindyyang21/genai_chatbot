@@ -15,6 +15,8 @@ public partial class GeoDbContext : DbContext
 
     public virtual DbSet<Feedback> Feedbacks { get; set; }
 
+    public virtual DbSet<Icon> Icons { get; set; }
+
     public virtual DbSet<InitialMessage> InitialMessages { get; set; }
 
     public virtual DbSet<Menu> Menus { get; set; }
@@ -37,6 +39,20 @@ public partial class GeoDbContext : DbContext
                 .HasMaxLength(255);
         });
 
+        modelBuilder.Entity<Icon>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Icon__3214EC073D423A2B");
+
+            entity.ToTable("Icon");
+
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.Icon1)
+                .HasMaxLength(255)
+                .HasColumnName("Icon");
+        });
+
         modelBuilder.Entity<InitialMessage>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__InitialM__3214EC079AEF56F1");
@@ -49,14 +65,14 @@ public partial class GeoDbContext : DbContext
 
         modelBuilder.Entity<Menu>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Menu__3214EC07E741CCCB");
+            entity.HasKey(e => e.Id).HasName("PK__tmp_ms_x__3214EC07788EA081");
 
             entity.ToTable("Menu");
 
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
-            entity.Property(e => e.ImagePath).HasMaxLength(255);
+            entity.Property(e => e.ImageFileName).HasMaxLength(255);
         });
 
         modelBuilder.Entity<Ticon>(entity =>
