@@ -19,7 +19,19 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[Icon]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[InitialMessages]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[Menu]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[TIcon]",
          "ObjectType": 0
       }
    ],

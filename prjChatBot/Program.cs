@@ -6,10 +6,8 @@ var builder = WebApplication.CreateBuilder(args);
 //var port = Environment.GetEnvironmentVariable("PORT") ?? "8081";
 //builder.WebHost.UseUrls($"http://*:{port}");
 
-var cnstr = $"Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename={builder.Environment.ContentRootPath}App_Data\\Geo.mdf;Integrated Security=True;Trusted_Connection=True;";
-builder.Services.AddMvc();
 builder.Services.AddDbContext<GeoDbContext>(
-    options => options.UseSqlServer(cnstr));
+    options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
