@@ -1,4 +1,5 @@
 ﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model IEnumerable<prjChatBot.Models.Menu>
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -88,14 +89,26 @@
             <div id="menu-box" class="hidden">
                 <table border="1">
                     <tr>
-                        <td><div class="menu-item" onclick="sendMenuItemMessage(this)"><img src="@Url.Content("~/images/new-product-icon.png")" alt="new-product-icon" class="menu-icon" asp-append-version="true"><br />最新上架</div></td>
-                        <td><div class="menu-item" onclick="sendMenuItemMessage(this)"><img src="@Url.Content("~/images/farmer-icon.png")" alt="farmer-icon" class="menu-icon" asp-append-version="true"><br />青農資訊</div></td>
-                        <td><div class="menu-item" onclick="sendMenuItemMessage(this)"><img src="@Url.Content("~/images/recommend-icon.png")" alt="recommend-icon" class="menu-icon" asp-append-version="true"><br />推薦產品</div></td>
+                        @foreach (var item in Model.Take(3))
+                        {
+                            <td>
+                                <div class="menu-item" onclick="sendMenuItemMessage(this)">
+                                    <img src="@Url.Content("~/images/" + item.ImageFileName)" alt="@item.Name" class="menu-icon">
+                                    <br />@item.TextContent
+                                </div>
+                            </td>
+                        }
                     </tr>
                     <tr>
-                        <td><div class="menu-item" onclick="sendMenuItemMessage(this)"><img src="@Url.Content("~/images/news-icon.png")"  alt="news-icon" class="menu-icon" asp-append-version="true"><br />最新消息</div></td>
-                        <td><div class="menu-item" onclick="sendMenuItemMessage(this)"><img src="@Url.Content("~/images/seasonal-product-icon.png")" alt="seasonal-product-icon" class="menu-icon" asp-append-version="true"><br />當季商品</div></td>
-                        <td><div class="menu-item" onclick="sendMenuItemMessage(this)"><img src="@Url.Content("~/images/cart-icon.png")" alt="cart-icon" class="menu-icon" asp-append-version="true"><br />如何訂購</div></td>
+                        @foreach (var item in Model.Skip(3).Take(3))
+                        {
+                            <td>
+                                <div class="menu-item" onclick="sendMenuItemMessage(this)">
+                                    <img src="@Url.Content("~/images/" + item.ImageFileName)" alt="@item.Name" class="menu-icon">
+                                    <br />@item.TextContent
+                                </div>
+                            </td>
+                        }
                     </tr>
                 </table>
 

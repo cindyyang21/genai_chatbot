@@ -310,7 +310,6 @@ td, tr {
     position: absolute;
     bottom: 65px; /* 顯示在選單按鈕上方 */
     width: 420px;
-    left: 10px;
     background-color: #f5d8e3;
     border: 1px solid #ccc;
     border-radius: 10px;
@@ -332,8 +331,8 @@ td, tr {
 }
 
 .menu-icon {
-    width: 60px;
-    height: 60px;
+    width: 100%;
+    height: 100%;
 }
 
 /* 點點點動畫樣式 */
@@ -428,13 +427,14 @@ td, tr {
     }
 
  #menu-box {
-     width: 95%;
+     width: 100%;
  }
 
  .menu-item {
      width: 20vw;
      font-size: 17px;
  }
+
     /* 點點點動畫樣式 */
     .typing-indicator {
         display: flex;

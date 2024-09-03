@@ -22,7 +22,7 @@
     }
 </style>
 <h1>Menu</h1>
-<a href="MenuCreate">新增</a>
+
 
 @* @if (Model != null)
 {
@@ -36,28 +36,41 @@ else
 
 <div class="container">
     <div class="row">
-      @if (Model == null || !Model.Any())
-    {
-    <p>目前沒有上傳的內容。</p>
-    }
-    else
-    {
         @foreach (var item in Model)
         {
             <div class="col-md-4 col-sm-6 mb-4">
                 <div class="card">
-                    <img src="@Url.Action("ShowImage", "Admin", new { id = item.Id })" class="card-img-top" alt="Image">
-                    <div class="card-body">
-                        <p class="card-text">@item.TextContent</p>
-                            <form asp-action="Delete" asp-controller="Admin" method="post">
-                            <input type="hidden" name="id" value="@item.Id" />
-                            <button type="submit" class="btn btn-danger btn-sm">刪除</button>
+                    @if (string.IsNullOrEmpty(item.ImageFileName) || string.IsNullOrEmpty(item.TextContent))
+                    {
+                        <!-- 如果沒有圖片或文字，顯示新增表單 -->
+                        <form asp-action="Upload" asp-controller="Admin" method="post" enctype="multipart/form-data">
+                            <input type="hidden" name="menuName" value="@item.Name" />
+                            <div class="card-body">
+                                <label for="imageFile">上傳圖片:</label>
+                                <input type="file" name="imageFile" id="imageFile" class="form-control mb-2" />
+
+                                <label for="textContent">文字內容:</label>
+                                <textarea name="textContent" id="textContent" class="form-control mb-2"></textarea>
+
+                                <button type="submit" class="btn btn-primary btn-sm">新增</button>
+                            </div>
                         </form>
-                    </div>
+                    }
+                    else
+                    {
+                        <!-- 如果已有資料，顯示圖片、文字和刪除按鈕 -->
+                        <img src="@Url.Action("ShowImage", "Admin", new { id = item.Id })" class="card-img-top" alt="@item.Name">
+                        <div class="card-body">
+                            <p class="card-text">@item.TextContent</p>
+                            <form asp-action="Delete" asp-controller="Admin" method="post">
+                                <input type="hidden" name="id" value="@item.Id" />
+                                <button type="submit" class="btn btn-danger btn-sm">刪除</button>
+                            </form>
+                        </div>
+                    }
                 </div>
             </div>
         }
-    }
     </div>
 </div>
 

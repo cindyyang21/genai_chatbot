@@ -6,16 +6,17 @@ namespace prjChatBot.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly GeoDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(GeoDbContext context)
         {
-            _logger = logger;
+            _context = context;
         }
 
         public IActionResult Index()
         {
-            return View();
+            var menuItems = _context.Menus.ToList(); // 獲取所有選單項目
+            return View(menuItems);
         }
 
         public IActionResult Privacy()

@@ -35,63 +35,62 @@ namespace prjChatBot.Controllers
         }
         public IActionResult Menu()
         {
-            var contentList = _context.Menus.ToList(); // 獲取所有資料
-            return View(contentList); // 傳遞資料到視圖
+            // 獲取所有資料
+            var contentList = _context.Menus.ToList(); 
+            // 確保有六個預設的選單項目
+            var defaultMenuNames = new List<string> { "1", "2", "3", "4", "5", "6" };
+
+            foreach (var menuName in defaultMenuNames)
+            {
+                if (!contentList.Any(m => m.Name == menuName))
+                {
+                    contentList.Add(new Menu { Name = menuName, ImageFileName = null, TextContent = null });
+                }
+            }
+
+            return View(contentList);
         }
-        public IActionResult MenuCreate()
-        {
-            return View();
-        }
+
 
         // 上傳圖片與文字
         [HttpPost]
-        public async Task<IActionResult> Upload(IFormFile imageFile, string textContent)
+        public async Task<IActionResult> Upload(string menuName, IFormFile imageFile, string textContent)
         {
             if (imageFile != null && imageFile.Length > 0)
             {
-                using (var stream = imageFile.OpenReadStream())
+                var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
+                var fileName = Path.GetRandomFileName().Replace(".", "") + Path.GetExtension(imageFile.FileName);
+
+                using (var stream = new FileStream(Path.Combine(uploadPath, fileName), FileMode.Create))
                 {
-                    using (var image = Image.FromStream(stream))
-                    {
-                        // 設定目標大小 (例如 800x600)
-                        int targetWidth = 800;
-                        int targetHeight = 600;
-
-                        // 計算比例並調整大小
-                        var resizedImage = new Bitmap(targetWidth, targetHeight);
-                        using (var graphics = Graphics.FromImage(resizedImage))
-                        {
-                            graphics.CompositingQuality = CompositingQuality.HighQuality;
-                            graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                            graphics.SmoothingMode = SmoothingMode.HighQuality;
-                            graphics.DrawImage(image, 0, 0, targetWidth, targetHeight);
-                        }
-
-                        var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
-                        var fileName = Path.GetRandomFileName().Replace(".", "") + Path.GetExtension(imageFile.FileName);
-                        var filePath = Path.Combine(uploadPath, fileName);
-
-                        resizedImage.Save(filePath, ImageFormat.Jpeg); // 儲存圖片
-
-                        var content = new Menu
-                        {
-                            ImageFileName = fileName,
-                            TextContent = textContent,
-                            CreatedAt = DateTime.Now
-                        };
-
-                        _context.Menus.Add(content);
-                        await _context.SaveChangesAsync();
-                    }
+                    await imageFile.CopyToAsync(stream);
                 }
 
-                return RedirectToAction("Menu");
+                var menu = _context.Menus.FirstOrDefault(m => m.Name == menuName);
+                if (menu != null)
+                {
+                    menu.ImageFileName = fileName;
+                    menu.TextContent = textContent;
+                    _context.Update(menu);
+                }
+                else
+                {
+                    menu = new Menu
+                    {
+                        Name = menuName,
+                        ImageFileName = fileName,
+                        TextContent = textContent
+                    };
+                    _context.Add(menu);
+                }
+
+                await _context.SaveChangesAsync();
             }
 
-            ModelState.AddModelError("ImageFile", "請選擇一張圖片");
-            return View();
+            return RedirectToAction("Menu");
 
         }
+
 
         // 顯示圖片
         public IActionResult ShowImage(int id)

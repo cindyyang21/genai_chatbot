@@ -65,7 +65,7 @@ public partial class GeoDbContext : DbContext
 
         modelBuilder.Entity<Menu>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__tmp_ms_x__3214EC07788EA081");
+            entity.HasKey(e => e.Id).HasName("PK__tmp_ms_x__3214EC07376B82BB");
 
             entity.ToTable("Menu");
 
@@ -73,6 +73,8 @@ public partial class GeoDbContext : DbContext
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.ImageFileName).HasMaxLength(255);
+            entity.Property(e => e.Name).HasMaxLength(50);
+            entity.Property(e => e.TextContent).HasMaxLength(255);
         });
 
         modelBuilder.Entity<Ticon>(entity =>
