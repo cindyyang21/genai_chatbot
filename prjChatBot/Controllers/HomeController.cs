@@ -15,8 +15,16 @@ namespace prjChatBot.Controllers
 
         public IActionResult Index()
         {
-            var menuItems = _context.Menus.ToList(); // 獲取所有選單項目
-            return View(menuItems);
+            var productCards = _context.ProductCards.ToList(); // 獲取卡片資料
+            var menus = _context.Menus.ToList(); // 獲取菜單資料
+
+            var viewModel = new HomePageViewModel
+            {
+                ProductCards = productCards,
+                Menus = menus
+            };
+
+            return View(viewModel);
         }
 
         public IActionResult Privacy()

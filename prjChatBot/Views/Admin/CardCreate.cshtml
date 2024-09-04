@@ -1,0 +1,42 @@
+﻿@model prjChatBot.Models.ProductCard
+
+@{
+    ViewData["Title"] = "新增卡片";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>新增卡片</h1>
+
+<h4>ProductCard</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CardCreate" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label asp-for="Title" class="control-label">標題：</label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImageFileName" class="control-label">上傳圖片：</label>
+                <input type="file" name="imageFile" class="form-control" />
+                <span asp-validation-for="ImageFileName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProductInfoUrl" class="control-label">產品資訊：</label>
+                <input asp-for="ProductInfoUrl" class="form-control" placeholder="https://example.com/product-info" />
+                <span asp-validation-for="ProductInfoUrl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PurchaseUrl" class="control-label">購買連結：</label>
+                <input asp-for="PurchaseUrl" class="form-control" placeholder="https://example.com/purchase-link" />
+                <span asp-validation-for="PurchaseUrl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="建立" class="btn btn-primary" />
+                <a asp-action="Card" class="btn btn-secondary">回到卡片</a>
+            </div>
+        </form>
+    </div>
+</div>
+

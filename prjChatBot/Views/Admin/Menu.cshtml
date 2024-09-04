@@ -1,7 +1,7 @@
 ﻿@* @model prjChatBot.Models.Menu *@
 @model IEnumerable<prjChatBot.Models.Menu>
 @{
-    ViewData["Title"] = "Menu";
+    ViewData["Title"] = "選單列表";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 <style>
@@ -11,17 +11,28 @@
 
 
 
-    .card-img-top {
+    .card {
         width: 100%;
-        height: auto; /* 高度自適應 */
-        object-fit: contain; /* 保持圖片比例並完整顯示圖片 */
+        max-width: 100%; /* 卡片最大宽度为图片宽度 */
+        margin: auto; /* 居中显示 */
     }
+
+    .card-img-top {
+        width: 100%; /* 图片宽度占满卡片 */
+        height: auto; /* 高度自适应 */
+        object-fit: contain; /* 保持图片比例并完整显示图片 */
+    }
+
+    .card-body {
+        text-align: center; /* 使卡片内容居中 */
+    }
+
 
     p{
         text-align:center;
     }
 </style>
-<h1>Menu</h1>
+<h1>選單列表</h1>
 
 
 @* @if (Model != null)
@@ -38,12 +49,12 @@ else
     <div class="row">
         @foreach (var item in Model)
         {
-            <div class="col-md-4 col-sm-6 mb-4">
+            <div class="col-lg-2 col-md-4 col-sm-6 mb-4">
                 <div class="card">
                     @if (string.IsNullOrEmpty(item.ImageFileName) || string.IsNullOrEmpty(item.TextContent))
                     {
                         <!-- 如果沒有圖片或文字，顯示新增表單 -->
-                        <form asp-action="Upload" asp-controller="Admin" method="post" enctype="multipart/form-data">
+                        <form asp-action="MenuUpload" asp-controller="Admin" method="post" enctype="multipart/form-data">
                             <input type="hidden" name="menuName" value="@item.Name" />
                             <div class="card-body">
                                 <label for="imageFile">上傳圖片:</label>
@@ -62,12 +73,48 @@ else
                         <img src="@Url.Action("ShowImage", "Admin", new { id = item.Id })" class="card-img-top" alt="@item.Name">
                         <div class="card-body">
                             <p class="card-text">@item.TextContent</p>
-                            <form asp-action="Delete" asp-controller="Admin" method="post">
+
+                            <div class="d-flex justify-content-between">
+                            <!-- 编辑按钮 -->
+                            <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editModal-@item.Id">编辑</button>
+ 
+                            <!-- 刪除按钮 -->
+                            <form asp-action="MenuDelete" asp-controller="Admin" method="post">
                                 <input type="hidden" name="id" value="@item.Id" />
-                                <button type="submit" class="btn btn-danger btn-sm">刪除</button>
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('確定要刪除嗎?')">刪除</button>
                             </form>
+                            </div>
                         </div>
                     }
+                </div>
+            </div>
+
+            <!-- 编辑模态框 -->
+            <div class="modal fade" id="editModal-@item.Id" tabindex="-1" role="dialog" aria-labelledby="editModalLabel-@item.Id" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editModalLabel-@item.Id">编辑内容</h5>
+                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <form asp-action="MenuEdit" asp-controller="Admin" method="post" enctype="multipart/form-data">
+                            <div class="modal-body">
+                                <input type="hidden" name="id" value="@item.Id" />
+
+                                <label for="editImageFile">上傳圖片:</label>
+                                <input type="file" name="imageFile" id="editImageFile" class="form-control mb-2" />
+
+                                <label for="editTextContent">文字内容:</label>
+                                <textarea name="textContent" id="editTextContent" class="form-control mb-2">@item.TextContent</textarea>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                                <button type="submit" class="btn btn-primary">保存更改</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         }

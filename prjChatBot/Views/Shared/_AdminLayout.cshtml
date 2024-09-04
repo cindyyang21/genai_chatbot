@@ -38,6 +38,15 @@
             border: 1px solid #ccc; /* 增加邊框 */
         }
 
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        button {
+            border: none;
+            background: none;
+        }
     </style>
 
 </head>
@@ -106,6 +115,7 @@
     <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     @RenderSection("Scripts", required: false)
+    @await Html.PartialAsync("_ToastPartial")
 
 </body>
 </html>

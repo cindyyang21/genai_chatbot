@@ -319,9 +319,9 @@ td, tr {
 }
 
 .menu-item {
-    font-size: 20px;
+    font-size: 15px;
     font-weight: 600;
-    width: 100%;
+    width: 60%;
     background-color: #f5d8e3;
     color: #5e4637;
     text-align: center;
@@ -431,8 +431,8 @@ td, tr {
  }
 
  .menu-item {
-     width: 20vw;
-     font-size: 17px;
+     width: 11vw;
+     font-size: 10px;
  }
 
     /* 點點點動畫樣式 */

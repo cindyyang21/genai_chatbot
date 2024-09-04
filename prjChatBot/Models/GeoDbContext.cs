@@ -21,7 +21,7 @@ public partial class GeoDbContext : DbContext
 
     public virtual DbSet<Menu> Menus { get; set; }
 
-    public virtual DbSet<Ticon> Ticons { get; set; }
+    public virtual DbSet<ProductCard> ProductCards { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -77,16 +77,24 @@ public partial class GeoDbContext : DbContext
             entity.Property(e => e.TextContent).HasMaxLength(255);
         });
 
-        modelBuilder.Entity<Ticon>(entity =>
+        modelBuilder.Entity<ProductCard>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__TIcon__3214EC07AC6C412A");
+            entity.HasKey(e => e.Id).HasName("PK__ProductC__3214EC0796A3473A");
 
-            entity.ToTable("TIcon");
+            entity.ToTable("ProductCard");
 
-            entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
-            entity.Property(e => e.Icon).HasMaxLength(255);
+            entity.Property(e => e.ImageFileName)
+                .IsRequired()
+                .HasMaxLength(255);
+            entity.Property(e => e.ProductInfoUrl)
+                .IsRequired()
+                .HasMaxLength(255);
+            entity.Property(e => e.PurchaseUrl)
+                .IsRequired()
+                .HasMaxLength(255);
+            entity.Property(e => e.Title)
+                .IsRequired()
+                .HasMaxLength(255);
         });
 
         OnModelCreatingPartial(modelBuilder);

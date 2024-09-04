@@ -31,7 +31,7 @@
          "ObjectType": 0
       },
       {
-         "Name": "[dbo].[TIcon]",
+         "Name": "[dbo].[ProductCard]",
          "ObjectType": 0
       }
    ],
