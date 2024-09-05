@@ -1,8 +1,59 @@
-﻿
+﻿@model IEnumerable<prjChatBot.Models.InitialMessage>
 @{
     ViewData["Title"] = "Welcome";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
+<style>
+    table, th, td {
+        border: 1px solid black; /* 為表格、標題欄、單元格加上邊框 */
+        border-collapse: collapse; /* 確保邊框不會重疊 */
+    }
+</style>
+
 <h1>Welcome</h1>
+
+<a href="@Url.Action("WelcomeCreate", "Admin")">建立新歡迎訊息</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>訊息</th>
+            <th>創建時間</th>
+            <th>操作</th> <!-- 新增這一列標題，表示編輯和刪除功能 -->
+        </tr>
+    </thead>
+    <tbody>
+        @if (!Model.Any())
+        {
+            <tr>
+                <td colspan="3" style="text-align:center;">目前沒有訊息</td> <!-- 合併列並顯示提示訊息 -->
+            </tr>
+        }
+        else
+        {
+            @foreach (var message in Model)
+            {
+                <tr>
+                    <td>@message.Id</td>
+                    <td>@message.Message</td>
+                    <td>@message.CreatedAt</td>
+                    <td>
+                    <div class="d-flex">
+                    <!-- 编辑按钮 -->
+                    <a asp-action="CardEdit" asp-route-id="@message.Id" class="btn btn-warning btn-sm">編輯</a>
+                    &nbsp;
+                    <form asp-action="WelcomeDelete" asp-controller="Admin" method="post">
+                        <input type="hidden" name="id" value="@message.Id" />
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('確定要刪除此訊息嗎？');">刪除</button>
+                    </form>
+                    </div>
+                    </td>
+                </tr>
+            }
+        }
+    <tbody>
+</table>
+
 

@@ -2,7 +2,6 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace prjChatBot.Models;
 
@@ -14,9 +13,11 @@ public partial class ProductCard
 
     public string ImageFileName { get; set; }
 
-    [RegularExpression(@"^(http|https)://.*", ErrorMessage = "Please enter a valid URL starting with http or https.")]
-    public string ProductInfoUrl { get; set; }
+    public string Name1 { get; set; }
 
-    [RegularExpression(@"^(http|https)://.*", ErrorMessage = "Please enter a valid URL starting with http or https.")]
-    public string PurchaseUrl { get; set; }
+    public string Url1 { get; set; }
+
+    public string Name2 { get; set; }
+
+    public string Url2 { get; set; }
 }

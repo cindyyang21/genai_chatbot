@@ -23,7 +23,7 @@
          "ObjectType": 0
       },
       {
-         "Name": "[dbo].[InitialMessages]",
+         "Name": "[dbo].[InitialMessage]",
          "ObjectType": 0
       },
       {

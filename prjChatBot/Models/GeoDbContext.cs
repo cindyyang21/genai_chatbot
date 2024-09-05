@@ -55,7 +55,9 @@ public partial class GeoDbContext : DbContext
 
         modelBuilder.Entity<InitialMessage>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__InitialM__3214EC079AEF56F1");
+            entity.HasKey(e => e.Id).HasName("PK__InitialM__3214EC07C7E201B6");
+
+            entity.ToTable("InitialMessage");
 
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
@@ -79,20 +81,26 @@ public partial class GeoDbContext : DbContext
 
         modelBuilder.Entity<ProductCard>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__ProductC__3214EC0796A3473A");
+            entity.HasKey(e => e.Id).HasName("PK__ProductC__3214EC07E95A8E3F");
 
             entity.ToTable("ProductCard");
 
             entity.Property(e => e.ImageFileName)
                 .IsRequired()
                 .HasMaxLength(255);
-            entity.Property(e => e.ProductInfoUrl)
+            entity.Property(e => e.Name1)
                 .IsRequired()
                 .HasMaxLength(255);
-            entity.Property(e => e.PurchaseUrl)
+            entity.Property(e => e.Name2)
                 .IsRequired()
                 .HasMaxLength(255);
             entity.Property(e => e.Title)
+                .IsRequired()
+                .HasMaxLength(255);
+            entity.Property(e => e.Url1)
+                .IsRequired()
+                .HasMaxLength(255);
+            entity.Property(e => e.Url2)
                 .IsRequired()
                 .HasMaxLength(255);
         });

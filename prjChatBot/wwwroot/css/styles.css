@@ -121,6 +121,20 @@ td, tr {
     margin-bottom: 7px;
 }
 
+/* 設定每個訊息框框的樣式 */
+.message-box {
+    border-radius: 8px; /* 邊角圓滑 */
+    background-color: #f9f9f9; /* 背景顏色 */
+    display: inline-block; /* 使框框寬度隨內容調整 */
+    max-width: 100%; /* 防止框框超過容器的最大寬度 */
+    word-wrap: break-word; /* 如果內容過長，自動換行 */
+}
+
+.message.bot {
+    font-size: 16px;
+    color: #333;
+}
+
 .feedback-container {
     font-size: small;
     color: grey;

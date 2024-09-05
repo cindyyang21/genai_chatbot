@@ -29,45 +29,79 @@
             </div>
 
             <div id="chat-content">
-                <div class="message bot">您好，有什麼我可以幫助您的嗎？</div>
-                <div class="message bot">以下為精選商品，提供您參考!</div>
-                <div id="cardCarousel" class="carousel slide" data-bs-ride="carousel">
-                    <div class="carousel-inner">
-                        @if (Model.ProductCards.Any())
+                <div class="initial-messages">
+                    @if (Model.InitialMessages != null && Model.InitialMessages.Any())
+                    {
+                        foreach (var message in Model.InitialMessages)
                         {
-                            var first = true;
-                            @foreach (var card in Model.ProductCards)
-                            {
-                                <div class="carousel-item @(first ? "active" : "")">
-                                    <div class="card" style="max-width: 100%; height:auto; margin: auto;">
-                                        <img src="@Url.Content("~/images/" + card.ImageFileName)" class="card-img-top" alt="@card.Title" asp-append-version="true">
-                                        <div class="card-body">
-                                            <h5 class="card-title">@card.Title</h5>
-                                        </div>
-                                        <ul class="list-group list-group-flush">
-                                            <li class="list-group-item"><a target="_blank" href="@card.ProductInfoUrl" class="card-link">產品資訊</a></li>
-                                            <li class="list-group-item"><a target="_blank" href="@card.PurchaseUrl" class="card-link">購買連結</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                first = false;
-                            }
+                            <div class="message-box">
+                                <div class="message bot">@message.Message</div>
+                            </div>
                         }
-                        else
-                        {
-                            <p>目前沒有產品資料。</p>
-                        }
-                    </div>
-                    <button class="carousel-control-prev" type="button" data-bs-target="#cardCarousel" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#cardCarousel" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
+                    }
                 </div>
+
+
+                @if (Model.ProductCards.Any())
+                {
+                    if (Model.ProductCards.Count() == 1)
+                    {
+                        <!-- 只有一張卡片，不顯示輪播 -->
+                        var singleCard = Model.ProductCards.First();
+                        <div class="card" style="max-width: 100%; height:auto; margin: auto;">
+                            <img src="@Url.Content("~/images/" + singleCard.ImageFileName)" class="card-img-top" alt="@singleCard.Title" asp-append-version="true">
+                            <div class="card-body">
+                                <h5 class="card-title">@singleCard.Title</h5>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><a target="_blank" href="@singleCard.Url1" class="card-link">@singleCard.Name1</a></li>
+                                <li class="list-group-item"><a target="_blank" href="@singleCard.Url2" class="card-link">@singleCard.Name2</a></li>
+                            </ul>
+                        </div>
+                    }
+                    else if (Model.ProductCards.Count() > 1)
+                    {
+                        <!-- 兩張或以上卡片，顯示輪播 -->
+                        <div id="cardCarousel" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                @if (Model.ProductCards.Any())
+                                {
+                                    var first = true;
+                                    @foreach (var card in Model.ProductCards)
+                                    {
+                                        <div class="carousel-item @(first ? "active" : "")">
+                                            <div class="card" style="max-width: 100%; height:auto; margin: auto;">
+                                                <img src="@Url.Content("~/images/" + card.ImageFileName)" class="card-img-top" alt="@card.Title" asp-append-version="true">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">@card.Title</h5>
+                                                </div>
+                                                <ul class="list-group list-group-flush">
+                                                    <li class="list-group-item"><a target="_blank" href="@card.Url1" class="card-link">@card.Name1</a></li>
+                                                    <li class="list-group-item"><a target="_blank" href="@card.Url2" class="card-link">@card.Name2</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        first = false;
+                                    }
+                                }
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#cardCarousel" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#cardCarousel" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p>目前沒有產品資料。</p>
+                }
             </div>
+
 
             <div id="chat-input-area">
                 <button id="menu-button" onclick="toggleMenu()">☰</button>

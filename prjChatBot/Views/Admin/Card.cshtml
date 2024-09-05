@@ -1,52 +1,47 @@
 ﻿@model IEnumerable<prjChatBot.Models.ProductCard>
 @{
-    ViewData["Title"] = "Card";
+    ViewData["Title"] = "產品卡片";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
+<style>
+    .list-group-item{
 
-<h1>Card</h1>
+    }
+</style>
+
+<h1>產品卡片</h1>
 
 <p>
     <a asp-action="CardCreate" class="btn btn-primary">創建新卡片</a>
 </p>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>標題</th>
-            <th>圖片</th>
-            <th>產品資訊</th>
-            <th>購買連結</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-           <div class="col-lg-2 col-md-4 col-sm-6 mb-4">
-             <div class="card">
-              <tr>
-                <td>@item.Title</td>
-                <td>
-                    <img src="@Url.Content("~/images/" + item.ImageFileName)" alt="@item.Title" style="max-width: 150px;" />
-                </td>
-                <td>@item.ProductInfoUrl</td>
-                <td>@item.PurchaseUrl</td>
-                <td>
-                    <div class="d-flex">
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+            <div class="card h-100">
+                <img src="@Url.Content("~/images/" + item.ImageFileName)" class="card-img-top" alt="@item.Title" />
+                <div class="card-body">
+                    <h5 class="card-title">@item.Title</h5>
+                </div>
+                    <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><a target="_blank" href="@item.Url1" class="card-link">@item.Name1</a></li>
+                    <li class="list-group-item"><a target="_blank" href="@item.Url2" class="card-link">@item.Name2</a></li>
+                    </ul>
+  
+                <div class="card-footer">
+                    <div class="d-flex justify-content-between">
                         <!-- 编辑按钮 -->
                         <a asp-action="CardEdit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">編輯</a>
-                        &nbsp;
                         <!-- 刪除按钮 -->
                         <form asp-action="CardDelete" asp-controller="Admin" method="post">
                             <input type="hidden" name="id" value="@item.Id" />
                             <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('確定要刪除嗎?')">刪除</button>
                         </form>
                     </div>
-                </td>
-              </tr>
+                </div>
             </div>
-          </div>
-        }
-    </tbody>
-</table>
+        </div>
+    }
+</div>

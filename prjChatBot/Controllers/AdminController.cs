@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using prjChatBot.Models;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
-using System.Drawing;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
+using SixLabors.ImageSharp.Formats.Png;
+using SixLabors.ImageSharp.Formats.Jpeg;
 
 
 namespace prjChatBot.Controllers
@@ -23,10 +24,84 @@ namespace prjChatBot.Controllers
         {
             return View();
         }
+
+
+        // 顯示歡迎訊息
         public IActionResult Welcome()
+        {
+            var messages = _context.InitialMessages.OrderByDescending(m => m.CreatedAt).ToList();  // 確保是 List<T>
+            return View(messages);
+        }
+
+
+        // 顯示新增或編輯歡迎訊息的表單
+        [HttpGet]
+        public IActionResult WelcomeCreate()
         {
             return View();
         }
+
+        // 提交歡迎訊息
+        [HttpPost]
+        public IActionResult WelcomeCreate(InitialMessage newMessage)
+        {
+            if (ModelState.IsValid)
+            {
+                newMessage.CreatedAt = DateTime.UtcNow;
+                _context.InitialMessages.Add(newMessage);  // 新增新訊息到資料庫
+                _context.SaveChanges();
+                return RedirectToAction("Welcome");  // 重新導向到訊息列表
+            }
+
+            return View(newMessage);
+        }
+
+
+        // 編輯現有的歡迎訊息
+        [HttpGet]
+        public IActionResult WelcomeEdit(int id)
+        {
+            var message = _context.InitialMessages.FirstOrDefault(m => m.Id == id);
+            if (message == null)
+            {
+                return NotFound();
+            }
+            return View(message);
+        }
+
+        [HttpPost]
+        public IActionResult WelcomeEdit(InitialMessage updatedMessage)
+        {
+            if (ModelState.IsValid)
+            {
+                updatedMessage.CreatedAt = DateTime.UtcNow;
+                _context.InitialMessages.Update(updatedMessage);  // 更新訊息
+                _context.SaveChanges();
+                return RedirectToAction("Welcome");  // 重新導向到訊息列表
+            }
+
+            return View(updatedMessage);
+        }
+
+        [HttpPost]
+        public IActionResult WelcomeDelete(int id)
+        {
+            // 找到要刪除的訊息
+            var message = _context.InitialMessages.Find(id);
+            if (message == null)
+            {
+                return NotFound();
+            }
+
+            // 從資料庫中刪除
+            _context.InitialMessages.Remove(message);
+            _context.SaveChanges();
+
+            // 刪除後重定向回列表頁面
+            return RedirectToAction("Welcome");
+        }
+
+
         public IActionResult Icon()
         {
             return View();
@@ -56,6 +131,8 @@ namespace prjChatBot.Controllers
                 {
                     await imageFile.CopyToAsync(stream);
                 }
+                // 處理圖片縮放
+                ResizeImage(filePath, 500, 500);
 
                 model.ImageFileName = fileName;
                 _context.Add(model);
@@ -101,6 +178,9 @@ namespace prjChatBot.Controllers
                         {
                             await imageFile.CopyToAsync(fileStream);
                         }
+
+                        // 將圖片縮放至 500x500
+                        ResizeImage(filePath, 500, 500);
 
                         // 更新模型中的ImageFileName
                         productCard.ImageFileName = uniqueFileName;
@@ -170,63 +250,44 @@ namespace prjChatBot.Controllers
         {
             if (imageFile != null && imageFile.Length > 0)
             {
+                // 準備保存路徑
                 var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
+                if (!Directory.Exists(uploadPath))
+                {
+                    Directory.CreateDirectory(uploadPath); // 如果資料夾不存在，創建資料夾
+                }
+
                 var fileExtension = Path.GetExtension(imageFile.FileName).ToLowerInvariant();
                 var fileName = Path.GetRandomFileName().Replace(".", "") + fileExtension; // 保留原始文件扩展名
                 var filePath = Path.Combine(uploadPath, fileName);
 
-                using (var stream = imageFile.OpenReadStream())
+                using (var image = await SixLabors.ImageSharp.Image.LoadAsync(imageFile.OpenReadStream()))
                 {
-                    using (var image = System.Drawing.Image.FromStream(stream))
+                    // 設定最大寬度和高度
+                    int maxWidth = 400;
+                    int maxHeight = 400;
+
+                    // 計算縮放比例
+                    image.Mutate(x => x.Resize(new ResizeOptions
                     {
-                        // 设置最大宽度和高度
-                        int maxWidth = 400;
-                        int maxHeight = 400;
+                        Size = new Size(maxWidth, maxHeight),
+                        Mode = ResizeMode.Max // 保持比例縮放
+                    }));
 
-                        // 计算比例并调整大小
-                        var ratioX = (double)maxWidth / image.Width;
-                        var ratioY = (double)maxHeight / image.Height;
-                        var ratio = Math.Min(ratioX, ratioY);
-
-                        var newWidth = (int)(image.Width * ratio);
-                        var newHeight = (int)(image.Height * ratio);
-
-                        Bitmap resizedImage;
-
-                        if (fileExtension == ".png")
-                        {
-                            // 对于 PNG 格式，保留透明背景
-                            resizedImage = new Bitmap(newWidth, newHeight, PixelFormat.Format32bppArgb);
-                            using (var graphics = Graphics.FromImage(resizedImage))
-                            {
-                                graphics.CompositingQuality = CompositingQuality.HighQuality;
-                                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                                graphics.SmoothingMode = SmoothingMode.HighQuality;
-                                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-
-                                graphics.Clear(Color.Transparent); // 保持透明背景
-                                graphics.DrawImage(image, 0, 0, newWidth, newHeight);
-                            }
-                            resizedImage.Save(filePath, ImageFormat.Png); // 保存为 PNG 格式
-                        }
-                        else
-                        {
-                            // 对于非 PNG 格式，正常处理
-                            resizedImage = new Bitmap(newWidth, newHeight);
-                            using (var graphics = Graphics.FromImage(resizedImage))
-                            {
-                                graphics.CompositingQuality = CompositingQuality.HighQuality;
-                                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                                graphics.SmoothingMode = SmoothingMode.HighQuality;
-                                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-
-                                graphics.DrawImage(image, 0, 0, newWidth, newHeight);
-                            }
-                            resizedImage.Save(filePath, ImageFormat.Jpeg); // 保存为 JPEG 格式或其他适当格式
-                        }
+                    // 根據文件擴展名保存文件
+                    if (fileExtension == ".png")
+                    {
+                        // 保留透明背景並保存為 PNG
+                        await image.SaveAsync(filePath, new PngEncoder());
+                    }
+                    else
+                    {
+                        // 保存為 JPEG 或其他格式
+                        await image.SaveAsync(filePath, new JpegEncoder { Quality = 90 });
                     }
                 }
 
+                // 更新或創建菜單
                 var menu = _context.Menus.FirstOrDefault(m => m.Name == menuName);
                 if (menu != null)
                 {
@@ -316,71 +377,54 @@ namespace prjChatBot.Controllers
             if (imageFile != null && imageFile.Length > 0)
             {
                 var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
+                if (!Directory.Exists(uploadPath))
+                {
+                    Directory.CreateDirectory(uploadPath); // 如果目錄不存在，則創建目錄
+                }
+
                 var fileName = Path.GetRandomFileName().Replace(".", "") + Path.GetExtension(imageFile.FileName);
                 var filePath = Path.Combine(uploadPath, fileName);
 
-                using (var stream = imageFile.OpenReadStream())
+                // 使用 ImageSharp 打開圖片文件
+                using (var image = await SixLabors.ImageSharp.Image.LoadAsync(imageFile.OpenReadStream()))
                 {
-                    using (var image = Image.FromStream(stream))
+                    // 設定目標寬度和高度 (例如 400x400)
+                    int targetWidth = 400;
+                    int targetHeight = 400;
+
+                    // 使用 ImageSharp 進行圖片縮放
+                    image.Mutate(x => x.Resize(new ResizeOptions
                     {
-                        // 設定目標大小 (例如 400x400)
-                        int targetWidth = 400;
-                        int targetHeight = 400;
+                        Size = new Size(targetWidth, targetHeight),
+                        Mode = ResizeMode.Max // 保持圖片比例，不超出目標尺寸
+                    }));
 
-                        // 計算比例以保持圖片的縱橫比
-                        var ratioX = (double)targetWidth / image.Width;
-                        var ratioY = (double)targetHeight / image.Height;
-                        var ratio = Math.Min(ratioX, ratioY);
-
-                        int newWidth = (int)(image.Width * ratio);
-                        int newHeight = (int)(image.Height * ratio);
-
-                        Bitmap resizedImage;
-
-                        // 判断图片格式，如果是 PNG，保持透明背景
-                        if (image.RawFormat.Equals(ImageFormat.Png))
-                        {
-                            resizedImage = new Bitmap(newWidth, newHeight, PixelFormat.Format32bppArgb);
-                            using (var graphics = Graphics.FromImage(resizedImage))
-                            {
-                                graphics.CompositingQuality = CompositingQuality.HighQuality;
-                                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                                graphics.SmoothingMode = SmoothingMode.HighQuality;
-                                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-
-                                graphics.Clear(Color.Transparent); // 保持透明背景
-                                graphics.DrawImage(image, 0, 0, newWidth, newHeight);
-                            }
-                            resizedImage.Save(filePath, ImageFormat.Png); // 保存為 PNG 保留透明背景
-                        }
-                        else
-                        {
-                            resizedImage = new Bitmap(newWidth, newHeight);
-                            using (var graphics = Graphics.FromImage(resizedImage))
-                            {
-                                graphics.CompositingQuality = CompositingQuality.HighQuality;
-                                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                                graphics.SmoothingMode = SmoothingMode.HighQuality;
-                                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-
-                                graphics.DrawImage(image, 0, 0, newWidth, newHeight);
-                            }
-                            resizedImage.Save(filePath, ImageFormat.Jpeg); // 保存為 JPEG
-                        }
-
-                        // 删除旧图片文件
-                        var oldImagePath = Path.Combine(uploadPath, content.ImageFileName);
-                        if (System.IO.File.Exists(oldImagePath))
-                        {
-                            System.IO.File.Delete(oldImagePath);
-                        }
-
-                        content.ImageFileName = fileName; // 更新圖片文件名
+                    // 檢查圖片的擴展名並決定保存格式
+                    if (Path.GetExtension(imageFile.FileName).ToLower() == ".png")
+                    {
+                        // 保存為 PNG，保持透明背景
+                        await image.SaveAsync(filePath, new PngEncoder());
                     }
+                    else
+                    {
+                        // 保存為 JPEG，設置質量
+                        await image.SaveAsync(filePath, new JpegEncoder { Quality = 90 });
+                    }
+
+                    // 刪除舊圖片文件
+                    var oldImagePath = Path.Combine(uploadPath, content.ImageFileName);
+                    if (System.IO.File.Exists(oldImagePath))
+                    {
+                        System.IO.File.Delete(oldImagePath);
+                    }
+
+                    // 更新圖片文件名到資料庫
+                    content.ImageFileName = fileName;
                 }
             }
 
-            content.TextContent = textContent; // 更新文字内容
+            // 更新文字內容
+            content.TextContent = textContent;
             _context.Update(content);
             await _context.SaveChangesAsync();
 
@@ -395,6 +439,21 @@ namespace prjChatBot.Controllers
         {
             return View();
         }
+
+        // 修改 ResizeImage 方法來使用 ImageSharp
+        private void ResizeImage(string imagePath, int width, int height)
+        {
+            using (var image = SixLabors.ImageSharp.Image.Load(imagePath))
+            {
+                // 縮放圖片至指定的寬高
+                image.Mutate(x => x.Resize(width, height));
+
+                // 保存為 JPEG 格式
+                image.Save(imagePath, new JpegEncoder());
+            }
+        }
+
+        
 
     }
 }

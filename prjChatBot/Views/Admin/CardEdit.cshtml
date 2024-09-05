@@ -19,19 +19,29 @@
         <div>
             <img src="@Url.Content("~/images/" + Model.ImageFileName)" alt="@Model.Title" style="max-width: 150px;" />
         </div>
-        <label asp-for="ImageFileName" class="control-label">Upload New Image (optional)</label>
+        <label asp-for="ImageFileName" class="control-label">上傳圖片</label>
         <input type="file" name="imageFile" class="form-control" />
         <span asp-validation-for="ImageFileName" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="ProductInfoUrl" class="control-label">Product Info URL</label>
-        <input asp-for="ProductInfoUrl" class="form-control" />
-        <span asp-validation-for="ProductInfoUrl" class="text-danger"></span>
+        <label asp-for="Name1" class="control-label">名稱1：</label>
+        <input asp-for="Name1" class="form-control" />
+        <span asp-validation-for="Name1" class="text-danger"></span>
     </div>
     <div class="form-group">
-        <label asp-for="PurchaseUrl" class="control-label">Purchase URL</label>
-        <input asp-for="PurchaseUrl" class="form-control" />
-        <span asp-validation-for="PurchaseUrl" class="text-danger"></span>
+        <label asp-for="Url1" class="control-label">連結1：</label>
+        <input asp-for="Url1" class="form-control" placeholder="https://example.com/product-info" />
+        <span asp-validation-for="Url1" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Name2" class="control-label">名稱2：</label>
+        <input asp-for="Name2" class="form-control" />
+        <span asp-validation-for="Name2" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Url2" class="control-label">連結2：</label>
+        <input asp-for="Url2" class="form-control" placeholder="https://example.com/purchase-link" />
+        <span asp-validation-for="Url2" class="text-danger"></span>
     </div>
     <div class="form-group">
         <input type="submit" value="儲存修改" class="btn btn-primary" />
