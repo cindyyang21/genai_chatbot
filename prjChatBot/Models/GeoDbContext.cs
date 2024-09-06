@@ -41,16 +41,14 @@ public partial class GeoDbContext : DbContext
 
         modelBuilder.Entity<Icon>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Icon__3214EC073D423A2B");
+            entity.HasKey(e => e.Id).HasName("PK__tmp_ms_x__3214EC07856C6BB4");
 
             entity.ToTable("Icon");
 
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
-            entity.Property(e => e.Icon1)
-                .HasMaxLength(255)
-                .HasColumnName("Icon");
+            entity.Property(e => e.Picture).HasMaxLength(255);
         });
 
         modelBuilder.Entity<InitialMessage>(entity =>

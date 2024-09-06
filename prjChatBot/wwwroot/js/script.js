@@ -324,18 +324,148 @@ function refreshChat() {
     const chatContent = document.getElementById('chat-content');
     chatContent.innerHTML = ''; // 清空對話內容
 
-    // 添加最初的 Message bot 訊息
-    const initialBotMessage = document.createElement('div');
-    initialBotMessage.classList.add('message', 'bot');
-    initialBotMessage.innerText = '您好，有什麼我可以幫助您的嗎？';
-    chatContent.appendChild(initialBotMessage);
+    // 發送請求獲取初始訊息
+    const initialMessagesPromise = fetch('/Admin/GetInitialMessages').then(response => response.json());
 
-    // 添加精選商品的 Message bot 訊息
-    const productMessage = document.createElement('div');
-    productMessage.classList.add('message', 'bot');
-    productMessage.innerText = '以下為精選商品，提供您參考!';
-    chatContent.appendChild(productMessage);
+    // 發送請求獲取產品卡片資料
+    const productCardsPromise = fetch('/Admin/GetProductCards').then(response => response.json());
+
+    // 使用 Promise.all 來等待兩個請求都完成
+    Promise.all([initialMessagesPromise, productCardsPromise])
+        .then(([initialMessages, productCards]) => {
+            // 1. 處理初始訊息
+            if (initialMessages.length > 0) {
+                initialMessages.forEach(message => {
+                    const messageDiv = document.createElement('div');
+                    messageDiv.classList.add('message', 'bot');
+                    messageDiv.innerText = message.message; // 將訊息顯示出來
+                    chatContent.appendChild(messageDiv);
+                });
+            }
+
+            // 2. 處理卡片資料
+            if (productCards.length > 0) {
+                // 建立輪播容器
+                const carouselContainer = document.createElement('div');
+                carouselContainer.id = "cardCarousel";
+                carouselContainer.classList.add("carousel", "slide");
+
+                // 當產品卡片數量大於1時才啟用輪播
+                if (productCards.length > 1) {
+                    carouselContainer.setAttribute("data-bs-ride", "carousel");
+                }
+
+                const carouselInner = document.createElement('div');
+                carouselInner.classList.add("carousel-inner");
+
+                // 生成每個卡片的 HTML 結構
+                productCards.forEach((card, index) => {
+                    const carouselItem = document.createElement('div');
+                    carouselItem.classList.add("carousel-item");
+                    if (index === 0) {
+                        carouselItem.classList.add("active"); // 第一個卡片要設為 active
+                    }
+
+                    // 卡片內容
+                    const cardDiv = document.createElement('div');
+                    cardDiv.classList.add('card');
+                    cardDiv.style.maxWidth = '100%';
+                    cardDiv.style.margin = 'auto';
+
+                    // 卡片圖片
+                    const cardImg = document.createElement('img');
+                    cardImg.src = `/images/${card.imageFileName}`;
+                    cardImg.classList.add('card-img-top');
+                    cardImg.alt = card.title;
+                    cardDiv.appendChild(cardImg);
+
+                    // 卡片 body
+                    const cardBody = document.createElement('div');
+                    cardBody.classList.add('card-body');
+                    const cardTitle = document.createElement('h5');
+                    cardTitle.classList.add('card-title');
+                    cardTitle.innerText = card.title;
+                    cardBody.appendChild(cardTitle);
+                    cardDiv.appendChild(cardBody);
+
+                    // 卡片鏈接
+                    const listGroup = document.createElement('ul');
+                    listGroup.classList.add('list-group', 'list-group-flush');
+
+                    const listItem1 = document.createElement('li');
+                    listItem1.classList.add('list-group-item');
+                    const link1 = document.createElement('a');
+                    link1.href = card.url1;
+                    link1.target = '_blank';
+                    link1.classList.add('card-link');
+                    link1.innerText = card.name1;
+                    listItem1.appendChild(link1);
+                    listGroup.appendChild(listItem1);
+
+                    const listItem2 = document.createElement('li');
+                    listItem2.classList.add('list-group-item');
+                    const link2 = document.createElement('a');
+                    link2.href = card.url2;
+                    link2.target = '_blank';
+                    link2.classList.add('card-link');
+                    link2.innerText = card.name2;
+                    listItem2.appendChild(link2);
+                    listGroup.appendChild(listItem2);
+
+                    cardDiv.appendChild(listGroup);
+
+                    // 將卡片加入到輪播項目中
+                    carouselItem.appendChild(cardDiv);
+                    carouselInner.appendChild(carouselItem);
+                });
+
+                // 將輪播項目加入到輪播容器中
+                carouselContainer.appendChild(carouselInner);
+
+                // 只有在 productCards 長度大於 1 時，才顯示控制按鈕
+                if (productCards.length > 1) {
+                    // 輪播控制按鈕
+                    const prevButton = document.createElement('button');
+                    prevButton.classList.add('carousel-control-prev');
+                    prevButton.type = 'button';
+                    prevButton.setAttribute('data-bs-target', '#cardCarousel');
+                    prevButton.setAttribute('data-bs-slide', 'prev');
+                    prevButton.innerHTML = `
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>`;
+                    carouselContainer.appendChild(prevButton);
+
+                    const nextButton = document.createElement('button');
+                    nextButton.classList.add('carousel-control-next');
+                    nextButton.type = 'button';
+                    nextButton.setAttribute('data-bs-target', '#cardCarousel');
+                    nextButton.setAttribute('data-bs-slide', 'next');
+                    nextButton.innerHTML = `
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>`;
+                    carouselContainer.appendChild(nextButton);
+                }
+
+                // 將輪播容器加入到 chatContent
+                chatContent.appendChild(carouselContainer);
+            } else {
+                const noProductDiv = document.createElement('p');
+                noProductDiv.innerText = '';
+                chatContent.appendChild(noProductDiv);
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching initial messages and product cards:', error);
+            const errorDiv = document.createElement('div');
+            errorDiv.classList.add('message', 'error');
+            errorDiv.innerText = '獲取資料時發生錯誤，請稍後再試。';
+            chatContent.appendChild(errorDiv);
+        });
 }
+
+
+
+
 
 document.getElementById('chat-input').addEventListener('keydown', function (e) {
     if (e.key === 'Enter') {

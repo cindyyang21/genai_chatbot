@@ -5,20 +5,18 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1>WelcomeCreate</h1>
-
-<h4>InitialMessage</h4>
+<h1>初始訊息新增</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="WelcomeCreate">
             <div>
-                <label for="message">Message:</label>
+                <label for="message">訊息:</label>
                 <textarea id="message" name="Message" rows="5" cols="50"></textarea>
             </div>
             <div class="d-flex justify-content-between">
-                <button type="submit" class="btn btn-primary">送出</button>
                 <a asp-action="Welcome" class="btn btn-secondary">回到列表</a>
+                <button type="submit" class="btn btn-primary">送出</button>
             </div>
         </form>
     </div>

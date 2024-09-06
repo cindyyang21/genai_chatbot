@@ -101,6 +101,18 @@ namespace prjChatBot.Controllers
             return RedirectToAction("Welcome");
         }
 
+        [HttpGet]
+        [Route("Admin/GetInitialMessages")]
+        public IActionResult GetInitialMessages()
+        {
+            // 使用依賴注入的方式獲取 DbContext
+            var initialMessages = _context.InitialMessages
+                .Select(m => new { m.Message }) // 只選取 Message 欄位
+                .ToList();
+
+            // 將結果以 JSON 格式返回給前端
+            return Json(initialMessages);
+        }
 
         public IActionResult Icon()
         {
@@ -223,6 +235,17 @@ namespace prjChatBot.Controllers
             }
             TempData["Success"] = "刪除成功";
             return RedirectToAction("Card");
+        }
+
+        [HttpGet]
+        [Route("Admin/GetProductCards")]
+        public IActionResult GetProductCards()
+        {
+            // 從資料庫中抓取所有的卡片資料
+            var productCards = _context.ProductCards.ToList();
+
+            // 返回卡片資料作為 JSON 格式
+            return Json(productCards);
         }
 
         public IActionResult Menu()

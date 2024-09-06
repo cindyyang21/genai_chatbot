@@ -9,7 +9,7 @@ public partial class Icon
 {
     public int Id { get; set; }
 
-    public string Icon1 { get; set; }
+    public string Picture { get; set; }
 
     public DateTime? CreatedAt { get; set; }
 }
