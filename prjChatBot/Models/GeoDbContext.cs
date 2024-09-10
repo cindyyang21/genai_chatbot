@@ -13,9 +13,11 @@ public partial class GeoDbContext : DbContext
     {
     }
 
-    public virtual DbSet<Feedback> Feedbacks { get; set; }
+    public virtual DbSet<ChatbotIcon> ChatbotIcons { get; set; }
 
-    public virtual DbSet<Icon> Icons { get; set; }
+    public virtual DbSet<CloseIcon> CloseIcons { get; set; }
+
+    public virtual DbSet<Feedback> Feedbacks { get; set; }
 
     public virtual DbSet<InitialMessage> InitialMessages { get; set; }
 
@@ -23,8 +25,34 @@ public partial class GeoDbContext : DbContext
 
     public virtual DbSet<ProductCard> ProductCards { get; set; }
 
+    public virtual DbSet<RefreshIcon> RefreshIcons { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<ChatbotIcon>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__ChatbotI__3214EC071E377D75");
+
+            entity.ToTable("ChatbotIcon");
+
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.Picture).HasMaxLength(255);
+        });
+
+        modelBuilder.Entity<CloseIcon>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__CloseIco__3214EC0737C0BFB1");
+
+            entity.ToTable("CloseIcon");
+
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.Picture).HasMaxLength(255);
+        });
+
         modelBuilder.Entity<Feedback>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Feedback__3214EC077588A279");
@@ -37,18 +65,6 @@ public partial class GeoDbContext : DbContext
             entity.Property(e => e.Option)
                 .IsRequired()
                 .HasMaxLength(255);
-        });
-
-        modelBuilder.Entity<Icon>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__tmp_ms_x__3214EC07856C6BB4");
-
-            entity.ToTable("Icon");
-
-            entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
-            entity.Property(e => e.Picture).HasMaxLength(255);
         });
 
         modelBuilder.Entity<InitialMessage>(entity =>
@@ -101,6 +117,18 @@ public partial class GeoDbContext : DbContext
             entity.Property(e => e.Url2)
                 .IsRequired()
                 .HasMaxLength(255);
+        });
+
+        modelBuilder.Entity<RefreshIcon>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__RefreshI__3214EC07E57F4BCC");
+
+            entity.ToTable("RefreshIcon");
+
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.Picture).HasMaxLength(255);
         });
 
         OnModelCreatingPartial(modelBuilder);

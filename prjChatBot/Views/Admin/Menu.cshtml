@@ -1,5 +1,4 @@
-﻿@* @model prjChatBot.Models.Menu *@
-@model IEnumerable<prjChatBot.Models.Menu>
+﻿@model IEnumerable<prjChatBot.Models.Menu>
 @{
     ViewData["Title"] = "選單列表";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
@@ -71,7 +70,7 @@ else
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="editModalLabel-@item.Id">编辑内容</h5>
+                            <h5 class="modal-title" id="editModalLabel-@item.Id">編輯內容</h5>
                             <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -97,23 +96,3 @@ else
         }
     </div>
 </div>
-
-
-@* @if (Model == null || !Model.Any())
-{
-    <p>目前沒有上傳的內容。</p>
-}
-else
-{
-    @foreach (var item in Model)
-    {
-        <div>
-            <img src="@Url.Action("ShowImage", "Admin", new { id = item.Id })" alt="Image" />
-            <p>@item.TextContent</p>
-            <form asp-action="Delete" asp-controller="Admin" method="post">
-                <input type="hidden" name="id" value="@item.Id" />
-                <button type="submit">刪除</button>
-            </form>
-        </div>
-    }
-} *@

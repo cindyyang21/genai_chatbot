@@ -1,0 +1,28 @@
+﻿@model prjChatBot.Models.CloseIcon
+
+@{
+    ViewData["Title"] = "建立關閉之圖標";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>建立關閉之圖標</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CloseIconCreate" method="post" enctype="multipart/form-data">
+
+            <div class="form-group">
+                <label asp-for="Picture" class="control-label">上傳圖片：</label>
+                <input type="file" name="imageFile" class="form-control" />
+                <span asp-validation-for="Picture" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="建立" class="btn btn-primary" />
+                <a asp-action="Icon" class="btn btn-secondary">回到卡片</a>
+            </div>
+        </form>
+    </div>
+</div>
+

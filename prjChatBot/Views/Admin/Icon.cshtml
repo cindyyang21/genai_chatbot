@@ -1,8 +1,120 @@
-﻿
+﻿@model prjChatBot.Models.HomePageViewModel
 @{
-    ViewData["Title"] = "Icon";
+    ViewData["Title"] = "圖示";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1>Icon</h1>
+<h1>圖示</h1>
+<div class="row">
+@if (Model.ChatbotIcons != null && Model.ChatbotIcons.Any())
+{
+    @foreach (var chatbotIcon in Model.ChatbotIcons)
+    {
+        <div class="col-md-4">
+            <div class="card mb-4 box-shadow">
+                @if (!string.IsNullOrEmpty(chatbotIcon.Picture))
+                {
+                    <img src="~/images/@chatbotIcon.Picture" class="card-img-top" alt="Chatbot Icon" style="width:100%; height:auto;">
+                }
+                <div class="card-body">
+                    <p class="card-text">最後更新時間: @chatbotIcon.CreatedAt</p>
+                    <div class="d-flex justify-content-between">
+                            <a asp-action="ChatbotIconEdit" asp-route-id="@chatbotIcon.Id" class="btn btn-warning">編輯</a>
+                            <form asp-action="ChatbotIconDelete" asp-controller="Admin" method="post">
+                                <input type="hidden" name="id" value="@chatbotIcon.Id" />
+                                <button type="submit" class="btn btn-danger" onclick="return confirm('確定要刪除嗎?')">刪除</button>
+                            </form>
+                    </div>
+                </div>
+            </div> 
+        </div>
+    }
+}
+else
+{
+    <div class="col-md-4">
+        <div class="card mb-4 box-shadow">
+            <div class="card-body">
+                <p class="card-text">目前無機器人頭像</p>
+                <a asp-action="ChatbotIconCreate"  class="btn btn-primary">上傳圖片</a>
+            </div>
+        </div>
+    </div>
+}
 
+
+@if (Model.CloseIcons != null && Model.CloseIcons.Any())
+{
+    @foreach (var closeIcon in Model.CloseIcons)
+    {
+        <div class="col-md-4">
+            <div class="card mb-4 box-shadow">
+                @if (!string.IsNullOrEmpty(closeIcon.Picture))
+                {
+                    <img src="~/images/@closeIcon.Picture" class="card-img-top" alt="Close Icon" style="width:100%; height:auto;">
+                }
+                <div class="card-body">
+                        <p class="card-text">最後更新時間: @closeIcon.CreatedAt</p>
+                    <div class="d-flex justify-content-between">
+                            <a asp-action="CloseIconEdit" asp-route-id="@closeIcon.Id" class="btn btn-warning">編輯</a>
+                            <form asp-action="CloseIconDelete" asp-controller="Admin" method="post">
+                                <input type="hidden" name="id" value="@closeIcon.Id" />
+                                <button type="submit" class="btn btn-danger" onclick="return confirm('確定要刪除嗎?')">刪除</button>
+                            </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div class="col-md-4">
+        <div class="card mb-4 box-shadow">
+            <div class="card-body">
+                <p class="card-text">目前無關閉之圖示</p>
+                <a asp-action="CloseIconCreate" class="btn btn-primary">上傳圖片</a>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+@if (Model.RefreshIcons != null && Model.RefreshIcons.Any())
+{
+    @foreach (var refreshIcon in Model.RefreshIcons)
+    {
+        <div class="col-md-4">
+            <div class="card mb-4 box-shadow">
+                @if (!string.IsNullOrEmpty(refreshIcon.Picture))
+                {
+                    <img src="~/images/@refreshIcon.Picture" class="card-img-top" alt="Refresh Icon" style="width:100%; height:auto;">
+                }
+                <div class="card-body">
+                        <p class="card-text">最後更新時間: @refreshIcon.CreatedAt</p>
+                    <div class="d-flex justify-content-between">
+
+                            <a asp-action="RefreshIconEdit" asp-route-id="@refreshIcon.Id" class="btn btn-warning">編輯</a>
+                            <form asp-action="RefreshIconDelete" asp-controller="Admin" method="post">
+                                <input type="hidden" name="id" value="@refreshIcon.Id" />
+                                <button type="submit" class="btn btn-danger" onclick="return confirm('確定要刪除嗎?')">刪除</button>
+                            </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div class="col-md-4">
+        <div class="card mb-4 box-shadow">
+            <div class="card-body">
+                <p class="card-text">目前無重整之圖示</p>
+                <a asp-action="RefreshIconCreate" class="btn btn-primary">上傳圖片</a>
+            </div>
+        </div>
+    </div>
+}
+</div>

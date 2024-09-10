@@ -17,15 +17,19 @@
     <div class="bg">
         <img src="/images/taoyuan.png" asp-append-version="true">
     </div>
+
     <div id="chatbot">
         <div id="chat-icon" onclick="toggleChat()">
-            <img src="@Url.Content("~/images/chatbot-icon.png")" alt="Chatbot" id="icon-img" asp-append-version="true">
-
+            @foreach (var chatboticon in Model.ChatbotIcons){
+                <img src="@Url.Content("~/images/" + chatboticon.Picture)" alt="Chatbot" id="icon-img" asp-append-version="true">
+            }
         </div>
         <div id="chat-box" class="hidden">
             <div id="chat-header">
                 <span>桃園好農</span>
-                <img src="@Url.Content("~/images/refresh-icon.png")" alt="Refresh" id="refresh-icon" onclick="refreshChat()" asp-append-version="true">
+                 @foreach (var refreshicon in Model.RefreshIcons){
+                    <img src="@Url.Content("~/images/" + refreshicon.Picture)" alt="Refresh" id="refresh-icon" onclick="refreshChat()" asp-append-version="true">
+                }
             </div>
 
             <div id="chat-content">

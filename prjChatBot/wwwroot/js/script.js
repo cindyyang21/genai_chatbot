@@ -11,6 +11,8 @@
     }
 }
 
+
+
 function toggleMenu() {
     const menuBox = document.getElementById('menu-box');
     if (menuBox.style.display === 'none' || menuBox.style.display === '') {
@@ -58,7 +60,7 @@ function sendMessage() {
 
 async function sendRequest(message) {
     const url = 'http://localhost:3000/bot/bd041136-3064-4b6f-a160-1481f399d8be/api';
-    const apiKey = 'sk_db_reCVt4ul5uNF70MVBjFUrrMfue4E4PsZ';
+    const apiKey = 'sk_db_SbHAI27Ve42urLpEIL6WyBs21vQd2GCs';
     const data = {
         message: message,
         history: [],

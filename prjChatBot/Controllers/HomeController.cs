@@ -18,12 +18,18 @@ namespace prjChatBot.Controllers
             var initialMessages = _context.InitialMessages.OrderBy(m => m.CreatedAt).ToList();
             var productCards = _context.ProductCards.ToList(); // 獲取卡片資料
             var menus = _context.Menus.ToList(); // 獲取菜單資料
+            var chatbotIcons = _context.ChatbotIcons.ToList(); // 獲取菜單資料
+            var closeIcons = _context.CloseIcons.ToList(); // 獲取菜單資料
+            var refreshIcons = _context.RefreshIcons.ToList(); // 獲取菜單資料
 
             var viewModel = new HomePageViewModel
             {
                 InitialMessages = initialMessages,
                 ProductCards = productCards,
-                Menus = menus
+                Menus = menus,
+                ChatbotIcons = chatbotIcons,
+                CloseIcons = closeIcons,
+                RefreshIcons = refreshIcons
             };
 
             return View(viewModel);

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace prjChatBot.Models;
 
-public partial class Icon
+public partial class ChatbotIcon
 {
     public int Id { get; set; }
 

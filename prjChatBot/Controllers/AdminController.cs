@@ -5,6 +5,7 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.Formats.Jpeg;
+using SixLabors.ImageSharp.PixelFormats;
 
 
 namespace prjChatBot.Controllers
@@ -114,11 +115,443 @@ namespace prjChatBot.Controllers
             return Json(initialMessages);
         }
 
+
         public IActionResult Icon()
+        {
+            // 從資料庫中獲取多個 icon 的資料
+            var model = new HomePageViewModel
+            {
+                ChatbotIcons = _context.ChatbotIcons.ToList(),   // 假設有多個 ChatbotIcons 資料
+                CloseIcons = _context.CloseIcons.ToList(),       // 假設有多個 CloseIcons 資料
+                RefreshIcons = _context.RefreshIcons.ToList()    // 假設有多個 RefreshIcons 資料
+            };
+
+            return View(model);
+        }
+
+        public IActionResult ChatbotIconCreate()
         {
             return View();
         }
- 
+
+        [HttpPost]
+        public async Task<IActionResult> ChatbotIconCreate(ChatbotIcon model, IFormFile imageFile)
+        {
+            if (ModelState.IsValid)
+            {
+                // 保存图片文件
+                var fileName = Path.GetRandomFileName().Replace(".", "") + Path.GetExtension(imageFile.FileName);
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await imageFile.CopyToAsync(stream);
+                }
+                // 如果是PNG，處理透明背景
+                if (Path.GetExtension(imageFile.FileName).ToLower() == ".png")
+                {
+                    using (var image = Image.Load<Rgba32>(filePath))  // 使用 Rgba32 保留透明度
+                    {
+                        // 縮放圖片
+                        image.Mutate(x => x.Resize(60, 60));
+
+                        // 再次保存處理過的 PNG 圖片，保持背景透明
+                        image.Save(filePath);  // ImageSharp 會根據擴展名自動保存為 PNG
+                    }
+                }
+
+                model.Picture = fileName;
+                _context.Add(model);
+                await _context.SaveChangesAsync();
+                TempData["Success"] = "新增成功";
+                return RedirectToAction(nameof(Icon));
+            }
+
+            return View(model);
+        }
+
+
+
+
+        // 顯示 ChatbotIconEdit 表單
+        public async Task<IActionResult> ChatbotIconEdit(int id)
+        {
+            var chatbotIcon = await _context.ChatbotIcons.FindAsync(id);
+            if (chatbotIcon == null)
+            {
+                return NotFound();
+            }
+            return View(chatbotIcon);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChatbotIconEdit(int id, ChatbotIcon chatbotIcon, IFormFile imageFile)
+        {
+            if (id != chatbotIcon.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    // 處理圖片上傳邏輯
+                    if (imageFile != null)
+                    {
+                        var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+                        var uniqueFileName = Guid.NewGuid().ToString() + "_" + imageFile.FileName;
+                        var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                        // 刪除舊圖片檔案（如果存在）
+                        if (!string.IsNullOrEmpty(chatbotIcon.Picture))
+                        {
+                            var oldFilePath = Path.Combine(uploadsFolder, chatbotIcon.Picture);
+                            if (System.IO.File.Exists(oldFilePath))
+                            {
+                                System.IO.File.Delete(oldFilePath);
+                            }
+                        }
+
+                        // 儲存圖片到伺服器
+                        using (var fileStream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await imageFile.CopyToAsync(fileStream);
+                        }
+
+                        // 將圖片縮放至 60x60
+                        ResizeImageWithTransparentBackground(filePath, 60, 60);
+
+                        // 更新模型中的Picture
+                        chatbotIcon.Picture = uniqueFileName;
+                    }
+
+                    // 更新模型中的CreatedAt欄位
+                    chatbotIcon.CreatedAt = DateTime.Now;
+
+                    // 更新產品卡資料
+                    _context.Update(chatbotIcon);
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", "無法儲存更改：" + ex.Message);
+                    return View(chatbotIcon);
+                }
+
+                TempData["Success"] = "編輯成功";
+                return RedirectToAction(nameof(Icon));
+            }
+
+            // 如果模型驗證失敗，返回View並顯示錯誤
+            return View(chatbotIcon);
+        }
+
+
+        // 刪除機器人圖片與對應的資料庫記錄
+        [HttpPost]
+        public async Task<IActionResult> ChatbotIconDelete(int id)
+        {
+            var content = await _context.ChatbotIcons.FindAsync(id);
+            if (content != null)
+            {
+                // 刪除對應的圖片文件
+                var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", content.Picture);
+                if (System.IO.File.Exists(imagePath))
+                {
+                    System.IO.File.Delete(imagePath);
+                }
+
+                // 刪除資料庫中的記錄
+                _context.ChatbotIcons.Remove(content);
+                await _context.SaveChangesAsync();
+            }
+            TempData["Success"] = "刪除成功";
+            return RedirectToAction("Icon");
+        }
+
+
+        public IActionResult CloseIconCreate()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CloseIconCreate(CloseIcon model, IFormFile imageFile)
+        {
+            if (ModelState.IsValid)
+            {
+                // 保存图片文件
+                var fileName = Path.GetRandomFileName().Replace(".", "") + Path.GetExtension(imageFile.FileName);
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await imageFile.CopyToAsync(stream);
+                }
+                // 如果是PNG，處理透明背景
+                if (Path.GetExtension(imageFile.FileName).ToLower() == ".png")
+                {
+                    using (var image = Image.Load<Rgba32>(filePath))  // 使用 Rgba32 保留透明度
+                    {
+                        // 縮放圖片
+                        image.Mutate(x => x.Resize(47, 47));
+
+                        // 再次保存處理過的 PNG 圖片，保持背景透明
+                        image.Save(filePath);  // ImageSharp 會根據擴展名自動保存為 PNG
+                    }
+                }
+
+                model.Picture = fileName;
+                _context.Add(model);
+                await _context.SaveChangesAsync();
+                TempData["Success"] = "新增成功";
+                return RedirectToAction(nameof(Icon));
+            }
+
+            return View(model);
+        }
+
+
+        // 顯示 CloseIconEdit 表單
+        public async Task<IActionResult> CloseIconEdit(int id)
+        {
+            var closeIcon = await _context.CloseIcons.FindAsync(id);
+            if (closeIcon == null)
+            {
+                return NotFound();
+            }
+            return View(closeIcon);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CloseIconEdit(int id, CloseIcon closeIcon, IFormFile imageFile)
+        {
+            if (id != closeIcon.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    // 處理圖片上傳邏輯
+                    if (imageFile != null)
+                    {
+                        var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+                        var uniqueFileName = Guid.NewGuid().ToString() + "_" + imageFile.FileName;
+                        var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                        // 刪除舊圖片檔案（如果存在）
+                        if (!string.IsNullOrEmpty(closeIcon.Picture))
+                        {
+                            var oldFilePath = Path.Combine(uploadsFolder, closeIcon.Picture);
+                            if (System.IO.File.Exists(oldFilePath))
+                            {
+                                System.IO.File.Delete(oldFilePath);
+                            }
+                        }
+
+                        // 儲存圖片到伺服器
+                        using (var fileStream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await imageFile.CopyToAsync(fileStream);
+                        }
+
+                        // 將圖片縮放至 47x47
+                        ResizeImageWithTransparentBackground(filePath, 47, 47);
+
+                        // 更新模型中的Picture
+                        closeIcon.Picture = uniqueFileName;
+                    }
+
+                    // 更新模型中的CreatedAt欄位
+                    closeIcon.CreatedAt = DateTime.Now;
+
+                    // 更新產品卡資料
+                    _context.Update(closeIcon);
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", "無法儲存更改：" + ex.Message);
+                    return View(closeIcon);
+                }
+
+                TempData["Success"] = "編輯成功";
+                return RedirectToAction(nameof(Icon));
+            }
+
+            // 如果模型驗證失敗，返回View並顯示錯誤
+            return View(closeIcon);
+        }
+
+
+        // 刪除關閉之圖片與對應的資料庫記錄
+        [HttpPost]
+        public async Task<IActionResult> CloseIconDelete(int id)
+        {
+            var content = await _context.CloseIcons.FindAsync(id);
+            if (content != null)
+            {
+                // 刪除對應的圖片文件
+                var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", content.Picture);
+                if (System.IO.File.Exists(imagePath))
+                {
+                    System.IO.File.Delete(imagePath);
+                }
+
+                // 刪除資料庫中的記錄
+                _context.CloseIcons.Remove(content);
+                await _context.SaveChangesAsync();
+            }
+            TempData["Success"] = "刪除成功";
+            return RedirectToAction("Icon");
+        }
+
+
+        public IActionResult RefreshIconCreate()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RefreshIconCreate(RefreshIcon model, IFormFile imageFile)
+        {
+            if (ModelState.IsValid)
+            {
+                // 保存图片文件
+                var fileName = Path.GetRandomFileName().Replace(".", "") + Path.GetExtension(imageFile.FileName);
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await imageFile.CopyToAsync(stream);
+                }
+                // 如果是PNG，處理透明背景
+                if (Path.GetExtension(imageFile.FileName).ToLower() == ".png")
+                {
+                    using (var image = Image.Load<Rgba32>(filePath))  // 使用 Rgba32 保留透明度
+                    {
+                        // 縮放圖片
+                        image.Mutate(x => x.Resize(47, 47));
+                        // 再次保存處理過的 PNG 圖片，保持背景透明
+                        image.Save(filePath);  // ImageSharp 會根據擴展名自動保存為 PNG
+                    }
+                }
+
+                model.Picture = fileName;
+                _context.Add(model);
+                await _context.SaveChangesAsync();
+                TempData["Success"] = "新增成功";
+                return RedirectToAction(nameof(Icon));
+            }
+
+            return View(model);
+        }
+
+
+        // 顯示 RefreshIconEdit 表單
+        public async Task<IActionResult> RefreshIconEdit(int id)
+        {
+            var refreshIcon = await _context.RefreshIcons.FindAsync(id);
+            if (refreshIcon == null)
+            {
+                return NotFound();
+            }
+            return View(refreshIcon);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RefreshIconEdit(int id, RefreshIcon refreshIcon, IFormFile imageFile)
+        {
+            if (id != refreshIcon.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    // 處理圖片上傳邏輯
+                    if (imageFile != null)
+                    {
+                        var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+                        var uniqueFileName = Guid.NewGuid().ToString() + "_" + imageFile.FileName;
+                        var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                        // 刪除舊圖片檔案（如果存在）
+                        if (!string.IsNullOrEmpty(refreshIcon.Picture))
+                        {
+                            var oldFilePath = Path.Combine(uploadsFolder, refreshIcon.Picture);
+                            if (System.IO.File.Exists(oldFilePath))
+                            {
+                                System.IO.File.Delete(oldFilePath);
+                            }
+                        }
+
+                        // 儲存圖片到伺服器
+                        using (var fileStream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await imageFile.CopyToAsync(fileStream);
+                        }
+
+                        // 將圖片縮放至 47x47
+                        ResizeImageWithTransparentBackground(filePath, 47, 47);
+                        // 更新模型中的Picture
+                        refreshIcon.Picture = uniqueFileName;
+                    }
+
+                    // 更新模型中的CreatedAt欄位
+                    refreshIcon.CreatedAt = DateTime.Now;
+
+                    // 更新產品卡資料
+                    _context.Update(refreshIcon);
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", "無法儲存更改：" + ex.Message);
+                    return View(refreshIcon);
+                }
+
+                TempData["Success"] = "編輯成功";
+                return RedirectToAction(nameof(Icon));
+            }
+
+            // 如果模型驗證失敗，返回View並顯示錯誤
+            return View(refreshIcon);
+        }
+
+
+        // 刪除關閉之圖片與對應的資料庫記錄
+        [HttpPost]
+        public async Task<IActionResult> RefreshIconDelete(int id)
+        {
+            var content = await _context.RefreshIcons.FindAsync(id);
+            if (content != null)
+            {
+                // 刪除對應的圖片文件
+                var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", content.Picture);
+                if (System.IO.File.Exists(imagePath))
+                {
+                    System.IO.File.Delete(imagePath);
+                }
+
+                // 刪除資料庫中的記錄
+                _context.RefreshIcons.Remove(content);
+                await _context.SaveChangesAsync();
+            }
+            TempData["Success"] = "刪除成功";
+            return RedirectToAction("Icon");
+        }
+
+
         public IActionResult Card()
         {
             var productCards = _context.ProductCards.ToList();
@@ -149,6 +582,7 @@ namespace prjChatBot.Controllers
                 model.ImageFileName = fileName;
                 _context.Add(model);
                 await _context.SaveChangesAsync();
+                TempData["Success"] = "新增成功";
                 return RedirectToAction(nameof(Card));
             }
 
@@ -192,7 +626,7 @@ namespace prjChatBot.Controllers
                         }
 
                         // 將圖片縮放至 500x500
-                        ResizeImage(filePath, 500, 500);
+                        ResizeImageWithTransparentBackground(filePath, 500, 500);
 
                         // 更新模型中的ImageFileName
                         productCard.ImageFileName = uniqueFileName;
@@ -208,12 +642,14 @@ namespace prjChatBot.Controllers
                     return View(productCard);
                 }
 
+                TempData["Success"] = "編輯成功";
                 return RedirectToAction(nameof(Card));
             }
 
             // 如果模型驗證失敗，返回View並顯示錯誤
             return View(productCard);
         }
+
 
         // 刪除圖片與對應的資料庫記錄
         [HttpPost]
@@ -332,6 +768,7 @@ namespace prjChatBot.Controllers
                 await _context.SaveChangesAsync();
             }
 
+            TempData["Success"] = "上傳成功";
             return RedirectToAction("Menu");
         }
 
@@ -451,6 +888,7 @@ namespace prjChatBot.Controllers
             _context.Update(content);
             await _context.SaveChangesAsync();
 
+            TempData["Success"] = "編輯成功";
             return RedirectToAction("Menu");
         }
 
@@ -476,7 +914,18 @@ namespace prjChatBot.Controllers
             }
         }
 
-        
+        private void ResizeImageWithTransparentBackground(string filePath, int width, int height)
+        {
+            using (var image = Image.Load<Rgba32>(filePath))
+            {
+                image.Mutate(x => x.Resize(width, height));
+
+                // 保持PNG透明背景
+                image.Save(filePath, new PngEncoder());
+            }
+        }
+
+
 
     }
 }

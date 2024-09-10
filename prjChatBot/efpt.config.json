@@ -15,11 +15,15 @@
    "T4TemplatePath": null,
    "Tables": [
       {
-         "Name": "[dbo].[Feedback]",
+         "Name": "[dbo].[ChatbotIcon]",
          "ObjectType": 0
       },
       {
-         "Name": "[dbo].[Icon]",
+         "Name": "[dbo].[CloseIcon]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Feedback]",
          "ObjectType": 0
       },
       {
@@ -32,6 +36,10 @@
       },
       {
          "Name": "[dbo].[ProductCard]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[RefreshIcon]",
          "ObjectType": 0
       }
    ],
