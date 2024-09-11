@@ -1,13 +1,19 @@
-﻿function toggleChat() {
+﻿
+
+function toggleChat() {
     const chatBox = document.getElementById('chat-box');
     const iconImg = document.getElementById('icon-img');
 
+    // 使用動態獲取的圖片路徑
+    const chatbotIcon = chatbotIconUrl;
+    const closeIcon = closeIconUrl;
+
     if (chatBox.style.display === 'none' || chatBox.style.display === '') {
         chatBox.style.display = 'flex';
-        iconImg.src = '/images/close-icon.png'; // 替換成叉叉的圖案
+        iconImg.src = closeIcon; // 替換成叉叉的圖案
     } else {
         chatBox.style.display = 'none';
-        iconImg.src = '/images/chatbot-icon.png'; // 替換回智能客服機器人的圖案
+        iconImg.src = chatbotIcon; // 替換回智能客服機器人的圖案
     }
 }
 
