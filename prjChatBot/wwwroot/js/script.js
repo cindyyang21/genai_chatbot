@@ -105,7 +105,13 @@ async function sendRequest(message) {
 
                         const botMessage = document.createElement('div');
                         botMessage.classList.add('message', 'bot');
+                        // 將 messageId 設為機器人的回覆文字，並且處理特殊字符
+                        const botText = data.bot.text.trim().replace(/\s+/g, ' ');  // 移除多餘的空格或換行符
+                        botMessage.setAttribute('data-id', botText);
                         botMessage.innerHTML = marked.parse(data.bot.text); // 使用 marked.js 解析 Markdown
+
+                       
+
 
                         //所有超連結另開分頁
                         const links = botMessage.querySelectorAll('a');
@@ -122,18 +128,26 @@ async function sendRequest(message) {
                         const feedbackText = document.createElement('span');
                         feedbackText.innerText = '這回答是否對你有幫助?';
 
+
+
                         const thumbsUp = document.createElement('span');
                         thumbsUp.innerText = '👍';
                         thumbsUp.classList.add('feedback-icon');
+
+                        // 將訊息ID作為參數傳遞給openModal
                         thumbsUp.addEventListener('click', () => {
-                            openModal('up');
+                            const messageId = botMessage.getAttribute('data-id'); // 假設每條訊息有data-id
+                            openModal('up', messageId); // 傳入訊息ID
                         });
 
                         const thumbsDown = document.createElement('span');
                         thumbsDown.innerText = '👎';
                         thumbsDown.classList.add('feedback-icon');
+
+                        // 同樣，將訊息ID作為參數傳遞
                         thumbsDown.addEventListener('click', () => {
-                            openModal('down');
+                            const messageId = botMessage.getAttribute('data-id');
+                            openModal('down', messageId);
                         });
 
                         feedbackContainer.appendChild(feedbackText);
@@ -141,6 +155,7 @@ async function sendRequest(message) {
                         feedbackContainer.appendChild(thumbsDown);
 
                         document.getElementById('chat-content').appendChild(feedbackContainer);
+
 
                         // 創建模態彈窗
                         const modal = document.createElement('div');
@@ -178,18 +193,55 @@ async function sendRequest(message) {
                         const submitButton = document.createElement('button');
                         submitButton.classList.add('submit-btn');
                         submitButton.innerText = '提交';
+
+
                         submitButton.onclick = () => {
                             const checkedOptions = [];
+                            let otherReasonText = '';
+
                             checkboxContainer.querySelectorAll('input:checked').forEach(checkbox => {
-                                checkedOptions.push(checkbox.value);
+                                if (checkbox.value === '其他') {
+                                    const otherText = checkbox.closest('label').querySelector('input[type="text"]')?.value || '';
+                                    if (otherText.trim() !== '') {
+                                        otherReasonText = otherText;
+                                    }
+                                } else {
+                                    checkedOptions.push(checkbox.value);
+                                }
                             });
-                            if (checkedOptions.length > 0) {
-                                alert('感謝您的反饋!');
+
+                            // 從彈窗中取得messageId
+                            const messageId = modal.getAttribute('data-message-id');
+
+                            if (checkedOptions.length > 0 || otherReasonText) {
+                                // 發送資料到後端
+                                fetch('/Admin/SubmitFeedback', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({
+                                        reasons: checkedOptions,
+                                        otherReason: otherReasonText,
+                                        feedbackType: modalTitle.innerText === '感謝您的支持！' ? 'up' : 'down',
+                                        chatbotMessage: messageId  // 傳送具體的訊息 ID，這裡是回覆的文字
+                                    })
+                                }).then(response => {
+                                    if (response.ok) {
+                                        alert('感謝您的反饋!');
+                                        closeModal();
+                                    } else {
+                                        alert('提交失敗，請稍後再試。');
+                                    }
+                                }).catch(error => {
+                                    alert('提交失敗，請稍後再試。');
+                                });
                             } else {
                                 alert('請選擇至少一個選項。');
                             }
-                            closeModal();
                         };
+
+
 
                         modalFooter.appendChild(submitButton);
 
@@ -201,7 +253,7 @@ async function sendRequest(message) {
                         document.body.appendChild(modal);
 
                         // 開啟彈窗
-                        function openModal(type) {
+                        function openModal(type, messageId) {
                             let reasons = [];
                             if (type === 'up') {
                                 modalTitle.innerText = '感謝您的支持！';
@@ -295,6 +347,8 @@ async function sendRequest(message) {
                             checkboxContainer.appendChild(column2);
 
                             modal.style.display = 'block';
+                            // 傳入messageId並保存在隱藏元素或全域變數中供提交使用
+                            modal.setAttribute('data-message-id', messageId);
                         }
 
                         // 關閉彈窗

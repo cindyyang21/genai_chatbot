@@ -17,6 +17,7 @@
                     <img src="~/images/@chatbotIcon.Picture" class="card-img-top" alt="Chatbot Icon" style="width:100%; height:auto;">
                 }
                 <div class="card-body">
+                        <h5 class="card-title">機器人圖示</h5>
                     <p class="card-text">最後更新時間: @chatbotIcon.CreatedAt</p>
                     <div class="d-flex justify-content-between">
                             <a asp-action="ChatbotIconEdit" asp-route-id="@chatbotIcon.Id" class="btn btn-warning">編輯</a>
@@ -35,6 +36,7 @@ else
     <div class="col-md-4">
         <div class="card mb-4 box-shadow">
             <div class="card-body">
+                    <h5 class="card-title">機器人圖示</h5>
                 <p class="card-text">目前無機器人頭像</p>
                 <a asp-action="ChatbotIconCreate"  class="btn btn-primary">上傳圖片</a>
             </div>
@@ -54,6 +56,7 @@ else
                     <img src="~/images/@closeIcon.Picture" class="card-img-top" alt="Close Icon" style="width:100%; height:auto;">
                 }
                 <div class="card-body">
+                        <h5 class="card-title">關閉圖示</h5>
                         <p class="card-text">最後更新時間: @closeIcon.CreatedAt</p>
                     <div class="d-flex justify-content-between">
                             <a asp-action="CloseIconEdit" asp-route-id="@closeIcon.Id" class="btn btn-warning">編輯</a>
@@ -72,6 +75,7 @@ else
     <div class="col-md-4">
         <div class="card mb-4 box-shadow">
             <div class="card-body">
+                <h5 class="card-title">關閉圖示</h5>
                 <p class="card-text">目前無關閉之圖示</p>
                 <a asp-action="CloseIconCreate" class="btn btn-primary">上傳圖片</a>
             </div>
@@ -92,6 +96,7 @@ else
                     <img src="~/images/@refreshIcon.Picture" class="card-img-top" alt="Refresh Icon" style="width:100%; height:auto;">
                 }
                 <div class="card-body">
+                        <h5 class="card-title">重整圖示</h5>
                         <p class="card-text">最後更新時間: @refreshIcon.CreatedAt</p>
                     <div class="d-flex justify-content-between">
 
@@ -111,6 +116,7 @@ else
     <div class="col-md-4">
         <div class="card mb-4 box-shadow">
             <div class="card-body">
+                <h5 class="card-title">重整圖示</h5>
                 <p class="card-text">目前無重整之圖示</p>
                 <a asp-action="RefreshIconCreate" class="btn btn-primary">上傳圖片</a>
             </div>

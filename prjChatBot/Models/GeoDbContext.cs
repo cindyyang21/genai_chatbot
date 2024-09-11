@@ -23,6 +23,8 @@ public partial class GeoDbContext : DbContext
 
     public virtual DbSet<Menu> Menus { get; set; }
 
+    public virtual DbSet<PieChartDatum> PieChartData { get; set; }
+
     public virtual DbSet<ProductCard> ProductCards { get; set; }
 
     public virtual DbSet<RefreshIcon> RefreshIcons { get; set; }
@@ -55,16 +57,12 @@ public partial class GeoDbContext : DbContext
 
         modelBuilder.Entity<Feedback>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Feedback__3214EC077588A279");
+            entity.HasKey(e => e.Id).HasName("PK__tmp_ms_x__3214EC07AF79CC4F");
 
             entity.ToTable("Feedback");
 
-            entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
-            entity.Property(e => e.Option)
-                .IsRequired()
-                .HasMaxLength(255);
+            entity.Property(e => e.FeedbackType).HasMaxLength(10);
+            entity.Property(e => e.SubmittedAt).HasColumnType("datetime");
         });
 
         modelBuilder.Entity<InitialMessage>(entity =>
@@ -91,6 +89,13 @@ public partial class GeoDbContext : DbContext
             entity.Property(e => e.ImageFileName).HasMaxLength(255);
             entity.Property(e => e.Name).HasMaxLength(50);
             entity.Property(e => e.TextContent).HasMaxLength(255);
+        });
+
+        modelBuilder.Entity<PieChartDatum>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__PieChart__3214EC07577C12E5");
+
+            entity.Property(e => e.Type).HasMaxLength(10);
         });
 
         modelBuilder.Entity<ProductCard>(entity =>

@@ -9,9 +9,13 @@ public partial class Feedback
 {
     public int Id { get; set; }
 
-    public string Option { get; set; }
+    public string ChatbotMessage { get; set; }
+
+    public List<string> Reasons { get; set; }
 
     public string OtherReason { get; set; }
 
-    public DateTime? CreatedAt { get; set; }
+    public string FeedbackType { get; set; } // up 或 down
+
+    public DateTime? SubmittedAt { get; set; }
 }

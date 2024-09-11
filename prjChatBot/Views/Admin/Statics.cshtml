@@ -1,8 +1,91 @@
-﻿
+﻿@model prjChatBot.Models.FeedbackStaticsViewModel
 @{
     ViewData["Title"] = "Statics";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1>Statics</h1>
+<style>
+    .chart-container {
+        width: 100%; /* 使用 100% 的寬度 */
+        max-width: 500px; /* 最大寬度設為 500px，可根據需要調整 */
+        margin: 0 auto; /* 讓圖表在頁面居中 */
+    }
+
+    canvas {
+        width: 100% !important; /* 保持 canvas 自適應寬度 */
+        height: auto !important; /* 高度隨寬度自動調整 */
+    }
+</style>
+
+<h1>智能客服反饋圓餅圖</h1>
+
+<h2>按讚的反饋統計</h2>
+<div class="chart-container">
+<canvas id="positiveFeedbackChart"></canvas>
+</div>
+
+<br />
+<hr />
+<br />
+
+<h2>按倒讚的反饋統計</h2>
+<div class="chart-container">
+<canvas id="negativeFeedbackChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // 將正面反饋的百分比計算放在 C# 內
+    var positiveCtx = document.getElementById('positiveFeedbackChart').getContext('2d');
+    var positiveChart = new Chart(positiveCtx, {
+        type: 'pie',
+        data: {
+            labels: @Html.Raw(Json.Serialize(Model.PositiveReasonsCount.Select(x => x.Reason))),
+            datasets: [{
+                // 在 C# 內計算百分比
+                data: @Html.Raw(Json.Serialize(Model.PositiveReasonsCount.Select(x => Math.Round((x.Count / (double)Model.PositiveReasonsCount.Sum(y => y.Count)) * 100, 2)))),
+                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40']
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function (tooltipItem) {
+                            return tooltipItem.label + ': ' + tooltipItem.raw + '%';
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // 將負面反饋的百分比計算放在 C# 內
+    var negativeCtx = document.getElementById('negativeFeedbackChart').getContext('2d');
+    var negativeChart = new Chart(negativeCtx, {
+        type: 'pie',
+        data: {
+            labels: @Html.Raw(Json.Serialize(Model.NegativeReasonsCount.Select(x => x.Reason))),
+            datasets: [{
+                // 在 C# 內計算百分比
+                data: @Html.Raw(Json.Serialize(Model.NegativeReasonsCount.Select(x => Math.Round((x.Count / (double)Model.NegativeReasonsCount.Sum(y => y.Count)) * 100, 2)))),
+                backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40']
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function (tooltipItem) {
+                            return tooltipItem.label + ': ' + tooltipItem.raw + '%';
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>
+
 

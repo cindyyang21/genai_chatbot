@@ -894,12 +894,115 @@ namespace prjChatBot.Controllers
 
         public IActionResult Statics()
         {
-            return View();
+            // 從資料庫中抓取所有回饋
+            var positiveFeedbacks = _context.Feedbacks.Where(f => f.FeedbackType == "up").ToList();
+            var negativeFeedbacks = _context.Feedbacks.Where(f => f.FeedbackType == "down").ToList();
+
+            // 統計按讚的原因及次數
+            var positiveReasonsCount = positiveFeedbacks
+                .SelectMany(f => f.Reasons)  // 展平原因列表
+                .GroupBy(reason => reason == "其他" ? "其他" : reason)  // 統一將「其他」原因歸為「其他」
+                .Select(g => new ReasonCount
+                {
+                    Reason = g.Key,
+                    Count = g.Count()
+                })
+                .ToList();
+
+            // 統計按倒讚的原因及次數
+            var negativeReasonsCount = negativeFeedbacks
+                .SelectMany(f => f.Reasons)
+                 .GroupBy(reason => reason == "其他" ? "其他" : reason)  // 統一將「其他」原因歸為「其他」
+                .Select(g => new ReasonCount
+                {
+                    Reason = g.Key,
+                    Count = g.Count()
+                })
+                .ToList();
+
+            // 將結果存入 ViewModel
+            var model = new FeedbackStaticsViewModel
+            {
+                PositiveReasonsCount = positiveReasonsCount,
+                NegativeReasonsCount = negativeReasonsCount
+            };
+
+            // 傳遞 ViewModel 給視圖
+            return View(model);
         }
+
         public IActionResult Feedback()
         {
-            return View();
+            var positiveFeedbacks = _context.Feedbacks.Where(f => f.FeedbackType == "up").ToList();
+            var negativeFeedbacks = _context.Feedbacks.Where(f => f.FeedbackType == "down").ToList();
+
+            var model = new FeedbackViewModel
+            {
+                PositiveFeedbacks = positiveFeedbacks,
+                NegativeFeedbacks = negativeFeedbacks
+            };
+
+            return View(model);
         }
+
+        [HttpPost]
+        public IActionResult SubmitFeedback([FromBody] Feedback feedback)
+        {
+            if (ModelState.IsValid)
+            {
+                feedback.SubmittedAt = DateTime.Now; // 設置提交時間
+                if (!string.IsNullOrEmpty(feedback.OtherReason))
+                {
+                    feedback.Reasons.Add("其他");  // 將「其他原因」歸類為「其他」
+                }
+                _context.Feedbacks.Add(feedback);     // 將回饋資料保存到資料庫
+                _context.SaveChanges();               // 保存更改
+                return Ok();
+            }
+            return BadRequest();
+        }
+        [HttpPost]
+        public IActionResult FeedbackDelete(int id)
+        {
+            var feedback = _context.Feedbacks.Find(id);
+            if (feedback == null)
+            {
+                return NotFound();
+            }
+            // 刪除資料庫中的回饋記錄
+            _context.Feedbacks.Remove(feedback);
+            _context.SaveChanges();
+            // 更新圓餅圖數據
+            UpdatePieChartData(feedback.FeedbackType, feedback.Reasons);
+            // 設置刪除成功的提示消息
+            TempData["Success"] = "刪除成功";
+
+            return RedirectToAction("Feedback");  // 返回回饋列表頁面
+        }
+
+
+        private void UpdatePieChartData(string feedbackType, List<string> reasons)
+        {
+            foreach (var reason in reasons)
+            {
+                var chartData = feedbackType == "up"
+                    ? _context.PieChartData.FirstOrDefault(d => d.Type == "up" && d.Reason == reason)
+                    : _context.PieChartData.FirstOrDefault(d => d.Type == "down" && d.Reason == reason);
+
+                if (chartData != null)
+                {
+                    chartData.Count -= 1;
+
+                    if (chartData.Count <= 0)
+                    {
+                        _context.PieChartData.Remove(chartData);
+                    }
+                }
+            }
+
+            _context.SaveChanges();
+        }
+
 
         // 修改 ResizeImage 方法來使用 ImageSharp
         private void ResizeImage(string imagePath, int width, int height)
