@@ -21,8 +21,20 @@ namespace prjChatBot.Controllers
             _webHostEnvironment = webHostEnvironment;
         }
 
+
+
         public IActionResult Index()
         {
+            return View();
+        }
+
+        public IActionResult Integration()
+        {
+            // 獲取聊天機器人嵌入的 URL，假設聊天機器人的 URL 是 "/Home/Bot"
+            var chatbotEmbedUrl = Url.Action("Bot", "Home", null, Request.Scheme);
+
+            // 傳遞 URL 到視圖中
+            ViewBag.ChatbotEmbedUrl = chatbotEmbedUrl;
             return View();
         }
 

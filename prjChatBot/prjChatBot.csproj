@@ -9,6 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Views\Home\test1.cshtml" />
+    <Content Remove="Views\Home\View.cshtml" />
     <Content Remove="wwwroot\images\CharocoalRoasstedBlackTea.jpg" />
     <Content Remove="wwwroot\images\refresh.png" />
     <Content Remove="wwwroot\images\XiuCaiBlackTea.jpg" />
@@ -28,7 +30,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.20.1" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.4" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.5" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.1.5" />
   </ItemGroup>
 

@@ -65,8 +65,17 @@ function sendMessage() {
 }
 
 async function sendRequest(message) {
-    const url = 'http://localhost:3000/bot/bd041136-3064-4b6f-a160-1481f399d8be/api';
-    const apiKey = 'sk_db_SbHAI27Ve42urLpEIL6WyBs21vQd2GCs';
+    // 從 localStorage 中讀取 URL 和 API 金鑰
+    const storedUrl = localStorage.getItem('chatbotUrl');
+    const storedApiKey = localStorage.getItem('chatbotApiKey');
+
+    // 使用儲存的 URL 和 API 金鑰，如果沒有，則使用預設值
+    const url = storedUrl;
+    const apiKey = storedApiKey;
+
+    // 使用 url 和 apiKey 進行後續操作
+    console.log('URL:', url);
+    console.log('API Key:', apiKey);
     const data = {
         message: message,
         history: [],
