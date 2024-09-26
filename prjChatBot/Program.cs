@@ -1,16 +1,31 @@
 using Microsoft.EntityFrameworkCore;
 using prjChatBot.Models;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
-//var port = Environment.GetEnvironmentVariable("PORT") ?? "8081";
-//builder.WebHost.UseUrls($"http://*:{port}");
+//var port = environment.getenvironmentvariable("port") ?? "8081";
+//builder.webhost.useurls($"http://*:{port}");
 
-var cnstr = $"Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename={builder.Environment.ContentRootPath}\\App_Data\\Geo.mdf;Integrated Security=True;Trusted_Connection=True;";
+var cnstr = "Server=mssqlserver;Database=GeoDb;User=sa;Password=YourComplexPassword123!;Encrypt=True;TrustServerCertificate=True;";
+
+
+builder.Services.AddDbContext<GeoDbContext>(options =>
+    options.UseSqlServer(cnstr));
+
+
+// ³]¸m CORS ¬Fµ¦
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins",
+        builder => builder.AllowAnyOrigin()
+                          .AllowAnyMethod()
+                          .AllowAnyHeader());
+});
+
+
 
 builder.Services.AddMvc();
-builder.Services.AddDbContext<GeoDbContext>
-    (optons => optons.UseSqlServer(cnstr));
 
 builder.Configuration.AddEnvironmentVariables();
 
@@ -18,6 +33,16 @@ builder.Configuration.AddEnvironmentVariables();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<GeoDbContext>();
+    context.Database.Migrate();
+}
+
+// ±Ò¥Î CORS
+app.UseCors("AllowAllOrigins");
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -36,6 +61,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Admin}/{action=Index}/{id?}");
 
 app.Run();

@@ -65,13 +65,17 @@ function sendMessage() {
 }
 
 async function sendRequest(message) {
-    // 從 localStorage 中讀取 URL 和 API 金鑰
-    const storedUrl = localStorage.getItem('chatbotUrl');
-    const storedApiKey = localStorage.getItem('chatbotApiKey');
+    // 從伺服器獲取 URL 和 API 金鑰
+    const settings = await getChatbotSettings();
+    const url = settings.url;
+    const apiKey = settings.apiKey;
 
-    // 使用儲存的 URL 和 API 金鑰，如果沒有，則使用預設值
-    const url = storedUrl;
-    const apiKey = storedApiKey;
+    // 如果沒有取得 URL 或 API 金鑰，顯示錯誤信息
+    if (!url || !apiKey) {
+        console.error('無法獲取 URL 或 API 金鑰');
+        document.getElementById('botResponse').innerText = '無法獲取 URL 或 API 金鑰';
+        return;
+    }
 
     // 使用 url 和 apiKey 進行後續操作
     console.log('URL:', url);
@@ -388,6 +392,28 @@ async function sendRequest(message) {
     } catch (error) {
         console.error('Error:', error);
         document.getElementById('botResponse').innerText = error;
+    }
+}
+
+// 從伺服器獲取 URL 和 API 金鑰
+async function getChatbotSettings() {
+    try {
+        const response = await fetch('/Admin/GetChatbotSettings', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`無法獲取設定資料，狀態碼: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error fetching settings:', error);
+        return { url: null, apiKey: null };
     }
 }
 

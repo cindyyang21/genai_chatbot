@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  prjchatbot:
+    image: prjchatbot:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    depends_on:
+      - mssqlserver
+    environment:
+      - ConnectionStrings__GeoDbContext=Server=mssqlserver;Database=GeoDb;User=sa;Password=YourComplexPassword123!;
+
+  mssqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      SA_PASSWORD: "YourComplexPassword123!"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlvolume:/var/opt/mssql
+
+volumes:
+  sqlvolume:
