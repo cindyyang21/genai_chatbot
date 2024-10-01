@@ -2,8 +2,8 @@
 window.addEventListener("message", function (event) {
     if (event.data === "expand") {
         // 展開對話框內容
-        document.getElementById('icon-img').style.display = "none";
-        document.getElementById('chat-box').style.display = "block";
+        document.getElementById('icon-img').style.display = "block";
+        document.getElementById('chat-box').style.display = "flex";
     } else if (event.data === "collapse") {
         // 顯示圖示，隱藏對話框
         document.getElementById('icon-img').style.display = "block";
