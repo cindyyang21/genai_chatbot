@@ -50,8 +50,6 @@ td, tr {
     #chat-icon img {
         width: 100%;
         height: auto;
-        margin-left: 16%;
-        margin-bottom:5%;
     }
 
 
@@ -418,7 +416,6 @@ td, tr {
         #chat-icon img {
             width: 100%;
             height: auto;
-            margin-left: 40%;
         }
 
             #chat-icon img[src="/images/close-icon.png"] {
