@@ -2,7 +2,24 @@
 @{
     ViewData["Title"] = "客服機器人設定";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
-    var embedUrl = ViewBag.ChatbotEmbedUrl;
+    var embedUrlString = ViewBag.ChatbotEmbedUrl as string;
+
+    Uri? embedUrl = null;
+    string? baseEmbedUrl = null;
+
+    if (!string.IsNullOrEmpty(embedUrlString) && Uri.IsWellFormedUriString(embedUrlString, UriKind.Absolute))
+    {
+        // 將字串轉換為 Uri 對象
+        embedUrl = new Uri(embedUrlString);
+        // 提取協議、主機名和端口
+        baseEmbedUrl = $"{embedUrl.Scheme}://{embedUrl.Host}:{embedUrl.Port}";
+    }
+    else
+    {
+        // 處理無效 URL，或提供默認值
+        baseEmbedUrl = "http://localhost:8080"; // 默認URL
+        <p style="color:red;">Invalid or missing ChatbotEmbedUrl, using default URL.</p>
+    }
 }
 <!DOCTYPE html>
 <html lang="zh-Hant">
@@ -39,11 +56,11 @@
         <div class="input-group" style="width: 100%;">
             <input id="iframeCode" type="text" readonly class="form-control" value='<iframe id="chatbotIframe" src="@embedUrl" frameborder="0" style="position: fixed; bottom: 20px; right: 20px; height: 80px; width: 80px;" scrolling="no"></iframe> <script>
 
-            var isChatOpen = false;
+             var isChatOpen = false;
 
 
             function toggleChatbotSize() {
-            var iframe = document.getElementById("chatbotIframe");
+             var iframe = document.getElementById("chatbotIframe");
             }
 
 
@@ -51,23 +68,23 @@
 
 
             window.addEventListener("message", function (event) {
-            if (event.origin === "http://localhost:8080") {
+            if (event.origin === "@baseEmbedUrl") {
             var iframe = document.getElementById("chatbotIframe");
 
             if (event.data === "expand") {
 
-            iframe.style.height = "70%";
-            iframe.style.maxHeight = "1000px";
-            iframe.style.width = "100%";
-            iframe.style.maxWidth = "550px";
+                iframe.style.height = "100%";
+                iframe.style.maxHeight = "1000px";
+                iframe.style.width = "100%";
+                iframe.style.maxWidth = "550px";
             } else if (event.data === "collapse") {
 
-            iframe.style.height = "80px";
-            iframe.style.width = "80px";
-             }
+                iframe.style.height = "80px";
+                iframe.style.width = "80px";
             }
-           });
-            </script>' />
+        }
+    });
+            </script>'/>
             <button onclick="copyToClipboard('iframeCode')" class="btn btn-primary btn-sm">複製代碼</button>
         </div>
         <br />
