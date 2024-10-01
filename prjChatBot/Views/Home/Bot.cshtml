@@ -152,6 +152,32 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/script.js" asp-append-version="true"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <script>
+        // 當頁面內容載入時傳遞初始高度
+        function sendHeight() {
+            var height = document.body.scrollHeight;
+            window.parent.postMessage(height, "http://localhost:8080");
+        }
+
+        window.addEventListener("load", function () {
+            sendHeight();  // 當頁面加載完成後發送高度
+        });
+
+        // 使用 MutationObserver 監聽 DOM 變化，當高度改變時通知父頁面
+        var observer = new MutationObserver(function (mutations) {
+            sendHeight(); // 當 DOM 改變時，更新 iframe 的高度
+        });
+
+        // 監聽 body 內的變化
+        observer.observe(document.body, {
+            attributes: true,
+            childList: true,
+            subtree: true
+        });
+    </script>
+
+
     @await Html.PartialAsync("_ToastPartial")
 </body>
 </html>

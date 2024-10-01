@@ -1,4 +1,15 @@
-﻿
+﻿// 父頁面傳來的消息展開或收起內容
+window.addEventListener("message", function (event) {
+    if (event.data === "expand") {
+        // 展開對話框內容
+        document.getElementById('icon-img').style.display = "none";
+        document.getElementById('chat-box').style.display = "block";
+    } else if (event.data === "collapse") {
+        // 顯示圖示，隱藏對話框
+        document.getElementById('icon-img').style.display = "block";
+        document.getElementById('chat-box').style.display = "none";
+    }
+});
 
 function toggleChat() {
     const chatBox = document.getElementById('chat-box');
@@ -11,9 +22,11 @@ function toggleChat() {
     if (chatBox.style.display === 'none' || chatBox.style.display === '') {
         chatBox.style.display = 'flex';
         iconImg.src = closeIcon; // 替換成叉叉的圖案
+        window.parent.postMessage("expand", "*");  // 通知父頁面展開 iframe
     } else {
         chatBox.style.display = 'none';
         iconImg.src = chatbotIcon; // 替換回智能客服機器人的圖案
+        window.parent.postMessage("collapse", "*");  // 通知父頁面收起 iframe
     }
 }
 
