@@ -1,4 +1,6 @@
-# genai_chatbot
+# chatbot前端
+
+## 安裝
 
 Clone the repository:
 
@@ -11,3 +13,11 @@ git clone https://github.com/cindyyang21/genai_chatbot.git
 ```bash
 docker-compose up --build
 ```
+
+## 內容設定
+### 必要設定
+1.設定名字與對話框顏色
+
+2.設定圖示
+
+3.連接機器人
