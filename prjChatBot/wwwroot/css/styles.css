@@ -321,7 +321,6 @@ td, tr {
     position: absolute;
     bottom: 65px; /* 顯示在選單按鈕上方 */
     width: 420px;
-    background-color: #f5d8e3;
     border: 1px solid #ccc;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);

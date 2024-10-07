@@ -6,7 +6,10 @@
 @{
     ViewData["Title"] = "Home Page";
     Layout = null;
+    // Extract color settings from the Header model (assuming colors are set in the model)
+    var backgroundColor = Model.ColorSelections?.FirstOrDefault()?.ColorCode ?? "#defaultColor";
 }
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -17,7 +20,16 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/styles.css" asp-append-version="true" />
 
-
+    <style>
+        #chat-header,
+        #send-button,
+        #menu-button,
+        #menu-box,
+        .carousel-control-prev-icon,
+        .carousel-control-next-icon {
+            background-color: @backgroundColor;
+        }
+    </style>
 
 </head>
 <body>
