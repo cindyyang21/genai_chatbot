@@ -13,6 +13,8 @@ public partial class GeoDbContext : DbContext
     {
     }
 
+    public virtual DbSet<BotName> BotNames { get; set; }
+
     public virtual DbSet<ChatbotIcon> ChatbotIcons { get; set; }
 
     public virtual DbSet<CloseIcon> CloseIcons { get; set; }
@@ -31,6 +33,16 @@ public partial class GeoDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<BotName>(entity =>
+        {
+            entity.ToTable("BotName");
+
+            entity.Property(e => e.Name)
+                .IsRequired()
+                .HasMaxLength(255)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+        });
+
         modelBuilder.Entity<ChatbotIcon>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__ChatbotI__3214EC071E377D75");
@@ -40,7 +52,9 @@ public partial class GeoDbContext : DbContext
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
-            entity.Property(e => e.Picture).HasMaxLength(255);
+            entity.Property(e => e.Picture)
+                .HasMaxLength(255)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
         });
 
         modelBuilder.Entity<CloseIcon>(entity =>
@@ -52,7 +66,9 @@ public partial class GeoDbContext : DbContext
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
-            entity.Property(e => e.Picture).HasMaxLength(255);
+            entity.Property(e => e.Picture)
+                .HasMaxLength(255)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
         });
 
         modelBuilder.Entity<Feedback>(entity =>
@@ -61,7 +77,12 @@ public partial class GeoDbContext : DbContext
 
             entity.ToTable("Feedback");
 
-            entity.Property(e => e.FeedbackType).HasMaxLength(10);
+            entity.Property(e => e.ChatbotMessage).UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            entity.Property(e => e.FeedbackType)
+                .HasMaxLength(10)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            entity.Property(e => e.OtherReason).UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            entity.Property(e => e.Reasons).UseCollation("SQL_Latin1_General_CP1_CI_AS");
             entity.Property(e => e.SubmittedAt).HasColumnType("datetime");
         });
 
@@ -74,7 +95,9 @@ public partial class GeoDbContext : DbContext
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
-            entity.Property(e => e.Message).IsRequired();
+            entity.Property(e => e.Message)
+                .IsRequired()
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
         });
 
         modelBuilder.Entity<Menu>(entity =>
@@ -86,16 +109,25 @@ public partial class GeoDbContext : DbContext
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
-            entity.Property(e => e.ImageFileName).HasMaxLength(255);
-            entity.Property(e => e.Name).HasMaxLength(50);
-            entity.Property(e => e.TextContent).HasMaxLength(255);
+            entity.Property(e => e.ImageFileName)
+                .HasMaxLength(255)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            entity.Property(e => e.Name)
+                .HasMaxLength(50)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            entity.Property(e => e.TextContent)
+                .HasMaxLength(255)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
         });
 
         modelBuilder.Entity<PieChartDatum>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__PieChart__3214EC07577C12E5");
 
-            entity.Property(e => e.Type).HasMaxLength(10);
+            entity.Property(e => e.Reason).UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            entity.Property(e => e.Type)
+                .HasMaxLength(10)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
         });
 
         modelBuilder.Entity<ProductCard>(entity =>
@@ -106,22 +138,28 @@ public partial class GeoDbContext : DbContext
 
             entity.Property(e => e.ImageFileName)
                 .IsRequired()
-                .HasMaxLength(255);
+                .HasMaxLength(255)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
             entity.Property(e => e.Name1)
                 .IsRequired()
-                .HasMaxLength(255);
+                .HasMaxLength(255)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
             entity.Property(e => e.Name2)
                 .IsRequired()
-                .HasMaxLength(255);
+                .HasMaxLength(255)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
             entity.Property(e => e.Title)
                 .IsRequired()
-                .HasMaxLength(255);
+                .HasMaxLength(255)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
             entity.Property(e => e.Url1)
                 .IsRequired()
-                .HasMaxLength(255);
+                .HasMaxLength(255)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
             entity.Property(e => e.Url2)
                 .IsRequired()
-                .HasMaxLength(255);
+                .HasMaxLength(255)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
         });
 
         modelBuilder.Entity<RefreshIcon>(entity =>
@@ -133,7 +171,9 @@ public partial class GeoDbContext : DbContext
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
-            entity.Property(e => e.Picture).HasMaxLength(255);
+            entity.Property(e => e.Picture)
+                .HasMaxLength(255)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
         });
 
         OnModelCreatingPartial(modelBuilder);

@@ -1,0 +1,25 @@
+﻿@model prjChatBot.Models.BotName
+@{
+    ViewData["Title"] = "UpdateName";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>UpdateName</h1>
+
+
+<form asp-action="UpdateName" method="post">
+    <label asp-for="Name" class="control-label">新的名稱：</label>
+    <input asp-for="Name" class="form-control" />
+
+    <input type="hidden" name="id" value="@Model.Id" /> <!-- 傳遞對應的 ID -->
+
+    <div class="form-group">
+        <input type="submit" value="更新名稱" class="btn btn-primary" />
+        <a asp-action="Header" class="btn btn-secondary">返回標題名稱與顏色</a>
+    </div>
+</form>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

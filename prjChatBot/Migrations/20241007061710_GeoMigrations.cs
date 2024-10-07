@@ -6,18 +6,31 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace prjChatBot.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class GeoMigrations : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "BotName",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false, collation: "SQL_Latin1_General_CP1_CI_AS")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BotName", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "ChatbotIcon",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Picture = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
+                    Picture = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true, collation: "SQL_Latin1_General_CP1_CI_AS"),
                     CreatedAt = table.Column<DateTime>(type: "datetime", nullable: true, defaultValueSql: "(getdate())")
                 },
                 constraints: table =>
@@ -31,7 +44,7 @@ namespace prjChatBot.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Picture = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
+                    Picture = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true, collation: "SQL_Latin1_General_CP1_CI_AS"),
                     CreatedAt = table.Column<DateTime>(type: "datetime", nullable: true, defaultValueSql: "(getdate())")
                 },
                 constraints: table =>
@@ -45,10 +58,10 @@ namespace prjChatBot.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ChatbotMessage = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Reasons = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    OtherReason = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    FeedbackType = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),
+                    ChatbotMessage = table.Column<string>(type: "nvarchar(max)", nullable: true, collation: "SQL_Latin1_General_CP1_CI_AS"),
+                    Reasons = table.Column<string>(type: "nvarchar(max)", nullable: true, collation: "SQL_Latin1_General_CP1_CI_AS"),
+                    OtherReason = table.Column<string>(type: "nvarchar(max)", nullable: true, collation: "SQL_Latin1_General_CP1_CI_AS"),
+                    FeedbackType = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true, collation: "SQL_Latin1_General_CP1_CI_AS"),
                     SubmittedAt = table.Column<DateTime>(type: "datetime", nullable: true)
                 },
                 constraints: table =>
@@ -62,7 +75,7 @@ namespace prjChatBot.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Message = table.Column<string>(type: "nvarchar(max)", nullable: false, collation: "SQL_Latin1_General_CP1_CI_AS"),
                     CreatedAt = table.Column<DateTime>(type: "datetime", nullable: false, defaultValueSql: "(getdate())")
                 },
                 constraints: table =>
@@ -76,9 +89,9 @@ namespace prjChatBot.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    ImageFileName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
-                    TextContent = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true, collation: "SQL_Latin1_General_CP1_CI_AS"),
+                    ImageFileName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true, collation: "SQL_Latin1_General_CP1_CI_AS"),
+                    TextContent = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true, collation: "SQL_Latin1_General_CP1_CI_AS"),
                     CreatedAt = table.Column<DateTime>(type: "datetime", nullable: true, defaultValueSql: "(getdate())")
                 },
                 constraints: table =>
@@ -92,8 +105,8 @@ namespace prjChatBot.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Type = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),
-                    Reason = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Type = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true, collation: "SQL_Latin1_General_CP1_CI_AS"),
+                    Reason = table.Column<string>(type: "nvarchar(max)", nullable: true, collation: "SQL_Latin1_General_CP1_CI_AS"),
                     Count = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -107,12 +120,12 @@ namespace prjChatBot.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    ImageFileName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    Name1 = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    Url1 = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    Name2 = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    Url2 = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false)
+                    Title = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false, collation: "SQL_Latin1_General_CP1_CI_AS"),
+                    ImageFileName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false, collation: "SQL_Latin1_General_CP1_CI_AS"),
+                    Name1 = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false, collation: "SQL_Latin1_General_CP1_CI_AS"),
+                    Url1 = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false, collation: "SQL_Latin1_General_CP1_CI_AS"),
+                    Name2 = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false, collation: "SQL_Latin1_General_CP1_CI_AS"),
+                    Url2 = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false, collation: "SQL_Latin1_General_CP1_CI_AS")
                 },
                 constraints: table =>
                 {
@@ -125,7 +138,7 @@ namespace prjChatBot.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Picture = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
+                    Picture = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true, collation: "SQL_Latin1_General_CP1_CI_AS"),
                     CreatedAt = table.Column<DateTime>(type: "datetime", nullable: true, defaultValueSql: "(getdate())")
                 },
                 constraints: table =>
@@ -137,6 +150,9 @@ namespace prjChatBot.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "BotName");
+
             migrationBuilder.DropTable(
                 name: "ChatbotIcon");
 

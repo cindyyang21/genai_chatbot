@@ -31,6 +31,82 @@ namespace prjChatBot.Controllers
             return View();
         }
 
+        // 顯示名稱的動作
+        public IActionResult Header()
+        {
+            // 從資料庫中獲取第一筆 BotName 資料
+            var botName = _context.BotNames.FirstOrDefault();
+
+            // 將 BotName 資料包裝到 ViewModel 中傳遞給視圖
+            var viewModel = new HomePageViewModel
+            {
+                BotNames = botName
+            };
+
+            return View(viewModel);
+        }
+
+        // GET: 新增名稱的頁面
+        public IActionResult HeaderCreate()
+        {
+            return View();
+        }
+
+        // POST: 提交新增的名稱
+        [HttpPost]
+        public IActionResult HeaderCreate(BotName botName)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.BotNames.Add(botName); // 將新名稱加入資料庫
+                _context.SaveChanges(); // 儲存變更
+                return RedirectToAction("Header"); // 新增後返回首頁
+            }
+            return View(botName);
+        }
+
+        // GET: 顯示更新名稱的頁面
+        public IActionResult UpdateName(int id)
+        {
+            var botName = _context.BotNames.Find(id); // 從資料庫查找對應的 BotName
+            if (botName == null)
+            {
+                // 如果找不到資料，返回到主頁，並顯示錯誤消息
+                TempData["ErrorMessage"] = "無法找到對應的名稱";
+                return RedirectToAction("Header");
+            }
+
+            return View(botName); // 將 BotName 資料傳遞給視圖
+        }
+
+
+        [HttpPost]
+        public IActionResult UpdateName(BotName botName)
+        {
+            if (ModelState.IsValid)
+            {
+                var entity = _context.BotNames.Find(botName.Id);
+                if (entity != null)
+                {
+                    entity.Name = botName.Name; // 更新名稱
+                    _context.SaveChanges(); // 儲存變更
+
+                    TempData["SuccessMessage"] = "名稱已成功更新";
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "更新失敗，找不到對應的記錄";
+                }
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "更新失敗，表單資料無效";
+            }
+
+            return RedirectToAction("Header"); // 更新後返回首頁
+        }
+
+
         public IActionResult Integration()
         {
             // 獲取聊天機器人嵌入的 URL，假設聊天機器人的 URL 是 "/Home/Bot"

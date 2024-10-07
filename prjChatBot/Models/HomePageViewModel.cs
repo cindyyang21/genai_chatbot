@@ -8,5 +8,6 @@
         public IEnumerable<ChatbotIcon> ChatbotIcons { get; set; }
         public IEnumerable<CloseIcon> CloseIcons { get; set; }
         public IEnumerable<RefreshIcon> RefreshIcons { get; set; }
+        public BotName BotNames { get; set; } // 單筆 BotName 資料
     }
 }

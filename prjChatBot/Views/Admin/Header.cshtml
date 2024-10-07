@@ -1,0 +1,22 @@
+﻿@model prjChatBot.Models.HomePageViewModel
+@{
+    ViewData["Title"] = "Header";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>Header</h1>
+
+@if (Model.BotNames == null)
+{
+    <p>
+        <a asp-action="HeaderCreate" class="btn btn-success">新增客服機器人名稱</a>
+    </p>
+    <h1>目前沒有客服機器人名稱</h1>
+}
+else
+{
+    <h1>客服機器人名稱：@Model.BotNames.Name</h1>
+    <p>
+        <a asp-action="UpdateName" asp-controller="Admin" asp-route-id="@Model.BotNames.Id" class="btn btn-primary">編輯名稱</a>
+    </p>
+}

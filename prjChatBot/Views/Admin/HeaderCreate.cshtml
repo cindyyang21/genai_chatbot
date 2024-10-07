@@ -1,0 +1,19 @@
+﻿@model prjChatBot.Models.BotName
+
+@{
+    ViewData["Title"] = "新增客服機器人名稱";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>新增客服機器人名稱</h2>
+
+<form asp-action="HeaderCreate" method="post">
+    <div class="form-group">
+        <label asp-for="Name" class="control-label">名稱</label>
+        <input asp-for="Name" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <input type="submit" value="建立" class="btn btn-primary" />
+        <a asp-action="Header" class="btn btn-secondary">回到標題名稱與顏色</a>
+    </div>
+</form>
