@@ -17,7 +17,7 @@ namespace prjChatBot.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false, collation: "SQL_Latin1_General_CP1_CI_AS")
+                    Name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true, collation: "SQL_Latin1_General_CP1_CI_AS")
                 },
                 constraints: table =>
                 {
@@ -50,6 +50,19 @@ namespace prjChatBot.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK__CloseIco__3214EC0737C0BFB1", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ColorSelection",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ColorCode = table.Column<string>(type: "nvarchar(7)", maxLength: 7, nullable: true, collation: "SQL_Latin1_General_CP1_CI_AS")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__ColorSel__3214EC07B9A2205B", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -158,6 +171,9 @@ namespace prjChatBot.Migrations
 
             migrationBuilder.DropTable(
                 name: "CloseIcon");
+
+            migrationBuilder.DropTable(
+                name: "ColorSelection");
 
             migrationBuilder.DropTable(
                 name: "Feedback");

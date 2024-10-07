@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1>Header</h1>
+<h4>機器人名稱與對話框顏色</h4>
 
 @if (Model.BotNames == null)
 {
@@ -15,8 +15,70 @@
 }
 else
 {
-    <h1>客服機器人名稱：@Model.BotNames.Name</h1>
+    <h1>客服機器人名稱：@(Model.BotNames.Name ?? "未命名的客服機器人")</h1>
     <p>
         <a asp-action="UpdateName" asp-controller="Admin" asp-route-id="@Model.BotNames.Id" class="btn btn-primary">編輯名稱</a>
     </p>
 }
+
+@if (Model.ColorSelections == null || !Model.ColorSelections.Any())
+{
+    <form asp-action="ColorPicker" method="post" class="color-form">
+        <label for="colorPicker-default">調色盤:</label>
+        <input type="color" id="colorPicker-default" name="colorCode" value="#ef79a0" />
+
+        <label for="colorCode-default">或輸入色碼:</label>
+        <input type="text" id="colorCode-default" name="colorCode" value="#ef79a0" placeholder="#000000" />
+
+        <button type="submit" class="btn btn-primary">保存顏色</button>
+    </form>
+}
+else
+{
+    @foreach (var colorSelection in Model.ColorSelections)
+    {
+        <form asp-action="ColorPicker" method="post" class="color-form" data-color-id="@colorSelection.Id">
+            <label for="colorPicker-@colorSelection.Id">調色盤:</label>
+            <input type="color" id="colorPicker-@colorSelection.Id" name="colorCode" value="@colorSelection.ColorCode" />
+
+            <label for="colorCode-@colorSelection.Id">或輸入色碼:</label>
+            <input type="text" id="colorCode-@colorSelection.Id" name="colorCode" value="@colorSelection.ColorCode" placeholder="#000000" />
+
+            <button type="submit" class="btn btn-primary">保存顏色</button>
+        </form>
+    }
+}
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // 遍歷所有表單，添加事件監聽
+        document.querySelectorAll('.color-form').forEach(function (form) {
+            const colorId = form.getAttribute('data-color-id');
+            const colorPicker = form.querySelector(`#colorPicker-${colorId}`);
+            const colorCodeInput = form.querySelector(`#colorCode-${colorId}`);
+
+            // 當調色盤顏色改變時，更新顏色
+            colorPicker.addEventListener('input', function () {
+                const newColor = colorPicker.value;
+                updateColor(colorPicker, colorCodeInput, newColor);
+            });
+
+            // 當輸入框內容改變時，更新顏色
+            colorCodeInput.addEventListener('input', function () {
+                const newColor = colorCodeInput.value;
+                if (/^#[0-9A-F]{6}$/i.test(newColor)) { // 確保輸入的是有效的色碼
+                    updateColor(colorPicker, colorCodeInput, newColor);
+                }
+            });
+        });
+
+        // 更新頁面中的顏色
+        function updateColor(colorPicker, colorCodeInput, color) {
+            // 同時更新調色盤和輸入框的值
+            colorPicker.value = color;
+            colorCodeInput.value = color;
+        }
+    });
+</script>

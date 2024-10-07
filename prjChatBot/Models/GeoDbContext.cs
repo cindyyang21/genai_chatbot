@@ -19,6 +19,8 @@ public partial class GeoDbContext : DbContext
 
     public virtual DbSet<CloseIcon> CloseIcons { get; set; }
 
+    public virtual DbSet<ColorSelection> ColorSelections { get; set; }
+
     public virtual DbSet<Feedback> Feedbacks { get; set; }
 
     public virtual DbSet<InitialMessage> InitialMessages { get; set; }
@@ -38,7 +40,6 @@ public partial class GeoDbContext : DbContext
             entity.ToTable("BotName");
 
             entity.Property(e => e.Name)
-                .IsRequired()
                 .HasMaxLength(255)
                 .UseCollation("SQL_Latin1_General_CP1_CI_AS");
         });
@@ -68,6 +69,17 @@ public partial class GeoDbContext : DbContext
                 .HasColumnType("datetime");
             entity.Property(e => e.Picture)
                 .HasMaxLength(255)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+        });
+
+        modelBuilder.Entity<ColorSelection>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__ColorSel__3214EC07B9A2205B");
+
+            entity.ToTable("ColorSelection");
+
+            entity.Property(e => e.ColorCode)
+                .HasMaxLength(7)
                 .UseCollation("SQL_Latin1_General_CP1_CI_AS");
         });
 

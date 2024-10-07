@@ -27,6 +27,10 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[ColorSelection]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[Feedback]",
          "ObjectType": 0
       },

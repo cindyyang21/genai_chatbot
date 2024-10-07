@@ -21,6 +21,8 @@ namespace prjChatBot.Controllers
             var chatbotIcons = _context.ChatbotIcons.ToList(); // 獲取菜單資料
             var closeIcons = _context.CloseIcons.ToList(); // 獲取菜單資料
             var refreshIcons = _context.RefreshIcons.ToList(); // 獲取菜單資料
+            var botNames = _context.BotNames.FirstOrDefault(); // 獲取菜單資料
+            var colorSelections = _context.ColorSelections.ToList(); // 獲取菜單資料
 
             var viewModel = new HomePageViewModel
             {
@@ -29,7 +31,9 @@ namespace prjChatBot.Controllers
                 Menus = menus,
                 ChatbotIcons = chatbotIcons,
                 CloseIcons = closeIcons,
-                RefreshIcons = refreshIcons
+                RefreshIcons = refreshIcons,
+                BotNames = botNames,
+                ColorSelections = colorSelections
             };
 
             return View(viewModel);
@@ -43,6 +47,8 @@ namespace prjChatBot.Controllers
             var chatbotIcons = _context.ChatbotIcons.ToList(); // 獲取菜單資料
             var closeIcons = _context.CloseIcons.ToList(); // 獲取菜單資料
             var refreshIcons = _context.RefreshIcons.ToList(); // 獲取菜單資料
+            var botNames = _context.BotNames.FirstOrDefault(); // 獲取菜單資料
+            var colorSelections = _context.ColorSelections.ToList(); // 獲取菜單資料
 
             var viewModel = new HomePageViewModel
             {
@@ -51,7 +57,9 @@ namespace prjChatBot.Controllers
                 Menus = menus,
                 ChatbotIcons = chatbotIcons,
                 CloseIcons = closeIcons,
-                RefreshIcons = refreshIcons
+                RefreshIcons = refreshIcons,
+                BotNames = botNames,
+                ColorSelections = colorSelections
             };
 
             return View(viewModel);

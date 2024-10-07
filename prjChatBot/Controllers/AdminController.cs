@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using prjChatBot.Models;
 using SixLabors.ImageSharp;
@@ -15,13 +14,11 @@ namespace prjChatBot.Controllers
     {
         private readonly GeoDbContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        private readonly IConfiguration _configuration;
 
-        public AdminController(GeoDbContext context, IWebHostEnvironment webHostEnvironment, IConfiguration configuration)
+        public AdminController(GeoDbContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
             _webHostEnvironment = webHostEnvironment;
-            _configuration = configuration;
         }
 
 
@@ -31,16 +28,21 @@ namespace prjChatBot.Controllers
             return View();
         }
 
+
         // 顯示名稱的動作
         public IActionResult Header()
         {
             // 從資料庫中獲取第一筆 BotName 資料
             var botName = _context.BotNames.FirstOrDefault();
 
-            // 將 BotName 資料包裝到 ViewModel 中傳遞給視圖
+            // 從資料庫中獲取最新一筆 ColorSelection 資料
+            var latestColor = _context.ColorSelections.OrderByDescending(c => c.Id).FirstOrDefault();
+
+            // 將 BotName 和 ColorSelection 資料包裝到 ViewModel 中傳遞給視圖
             var viewModel = new HomePageViewModel
             {
-                BotNames = botName
+                BotNames = botName, // 單一物件而非集合
+                ColorSelections = latestColor != null ? new List<ColorSelection> { latestColor } : new List<ColorSelection>()
             };
 
             return View(viewModel);
@@ -107,6 +109,29 @@ namespace prjChatBot.Controllers
         }
 
 
+        // POST: 提交選擇的顏色
+        [HttpPost]
+        public IActionResult ColorPicker(string colorCode)
+        {
+            if (!string.IsNullOrEmpty(colorCode))
+            {
+                var colorSelection = new ColorSelection
+                {
+                    ColorCode = colorCode
+                };
+
+                _context.ColorSelections.Add(colorSelection);
+                _context.SaveChanges();
+
+                TempData["Success"] = "顏色已成功儲存!";
+                return RedirectToAction("Header");
+            }
+
+            TempData["Error"] = "請選擇一個顏色!";
+            return View("Header");
+        }
+
+
         public IActionResult Integration()
         {
             // 獲取聊天機器人嵌入的 URL，假設聊天機器人的 URL 是 "/Home/Bot"
@@ -115,24 +140,6 @@ namespace prjChatBot.Controllers
             // 傳遞 URL 到視圖中
             ViewBag.ChatbotEmbedUrl = chatbotEmbedUrl;
             return View();
-        }
-
-        [HttpGet]
-        public IActionResult GetChatbotSettings()
-        {
-            var url = _configuration["Chatbot:Url"]; // 從配置檔案或資料庫讀取 URL
-            var apiKey = _configuration["Chatbot:ApiKey"]; // 從配置檔案或資料庫讀取 API 金鑰
-            return Json(new { url, apiKey });
-        }
-
-        [HttpPost]
-        public IActionResult SaveChatbotSettings([FromBody] ChatbotSettings settings)
-        {
-            // 這裡可以將新的 URL 和 API 金鑰存到資料庫或配置檔案中
-            _configuration["Chatbot:Url"] = settings.Url;
-            _configuration["Chatbot:ApiKey"] = settings.ApiKey;
-
-            return Ok(new { success = true, message = "設定已儲存" });
         }
 
 
@@ -796,7 +803,7 @@ namespace prjChatBot.Controllers
         public IActionResult Menu()
         {
             // 獲取所有資料
-            var contentList = _context.Menus.ToList(); 
+            var contentList = _context.Menus.ToList();
             // 確保有六個預設的選單項目
             var defaultMenuNames = new List<string> { "1", "2", "3", "4", "5", "6" };
 

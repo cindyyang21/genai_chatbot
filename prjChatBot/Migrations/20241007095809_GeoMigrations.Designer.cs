@@ -12,7 +12,7 @@ using prjChatBot.Models;
 namespace prjChatBot.Migrations
 {
     [DbContext(typeof(GeoDbContext))]
-    [Migration("20241007061710_GeoMigrations")]
+    [Migration("20241007095809_GeoMigrations")]
     partial class GeoMigrations
     {
         /// <inheritdoc />
@@ -34,7 +34,6 @@ namespace prjChatBot.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)")
                         .UseCollation("SQL_Latin1_General_CP1_CI_AS");
@@ -90,6 +89,25 @@ namespace prjChatBot.Migrations
                         .HasName("PK__CloseIco__3214EC0737C0BFB1");
 
                     b.ToTable("CloseIcon", (string)null);
+                });
+
+            modelBuilder.Entity("prjChatBot.Models.ColorSelection", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ColorCode")
+                        .HasMaxLength(7)
+                        .HasColumnType("nvarchar(7)")
+                        .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+
+                    b.HasKey("Id")
+                        .HasName("PK__ColorSel__3214EC07B9A2205B");
+
+                    b.ToTable("ColorSelection", (string)null);
                 });
 
             modelBuilder.Entity("prjChatBot.Models.Feedback", b =>

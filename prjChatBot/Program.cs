@@ -9,6 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 var cnstr = "Server=mssqlserver;Database=GeoDb;User=sa;Password=YourComplexPassword123!;Encrypt=True;TrustServerCertificate=True;";
 
+//var cnstr = $"Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename={builder.Environment.ContentRootPath}\\App_Data\\Geo.mdf;Integrated Security=True;Trusted_Connection=True;";
+
 
 builder.Services.AddDbContext<GeoDbContext>(options =>
     options.UseSqlServer(cnstr));
