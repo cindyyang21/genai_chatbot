@@ -52,3 +52,14 @@ docker-compose up --build
 
 ![image](https://github.com/cindyyang21/genai_chatbot/blob/main/ReadMeImage/%E5%9B%9E%E9%A5%8B.png?raw=true)
 ![image](https://github.com/cindyyang21/genai_chatbot/blob/main/ReadMeImage/%E5%9B%9E%E9%A5%8B1.png?raw=true)
+
+## 開發
+
+### 預覽
+
+將網址Admin及後面改為Home/Bot即可預覽
+
+### 資料庫
+
+連線地址為localhost,1433
+帳號密碼設定於Program.cs
