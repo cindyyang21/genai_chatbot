@@ -279,13 +279,11 @@ td, tr {
 }
 
     .bot {
-    background-color: #f5d8e3;
     color: black;
     align-self: flex-start;
 }
 
 .user {
-    background-color: #f5d8e3;
     color: black;
     align-self: flex-end;
 }
