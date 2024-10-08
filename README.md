@@ -59,6 +59,12 @@ docker-compose up --build
 
 將網址Admin及後面改為Home/Bot即可預覽
 
+### 原始碼
+
+前端頁面位於home/bot
+
+後臺控制位於admin
+
 ### 資料庫
 
 連線地址為localhost,1433
