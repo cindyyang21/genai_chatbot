@@ -11,15 +11,20 @@ git clone https://github.com/cindyyang21/genai_chatbot.git
 到專案資料夾內運行 docker-compose file:
 
 ```bash
-docker-compose up --build
+docker-compose up -d
 ```
 
 如果有修改原始碼需要重新建置，依序執行下列指令
 ```bash
+docker-compose down
+```
+若修改到資料庫則使用以下指令
+```bash
 docker-compose down -v
 ```
+執行完上述其中之一後，再執行下列指令
 ```bash
-docker-compose up --build
+docker-compose up -d
 ```
 ## 內容設定
 
