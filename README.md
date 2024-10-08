@@ -30,7 +30,7 @@ docker-compose up --build
 ![image](https://github.com/cindyyang21/genai_chatbot/blob/main/ReadMeImage/%E5%90%8D%E7%A8%B1%E8%88%87%E9%A1%8F%E8%89%B2.png?raw=true)
 2.連接機器人
 ![image](https://github.com/cindyyang21/genai_chatbot/blob/main/ReadMeImage/api%E8%88%87iframe.png?raw=true)
-3.設定圖示
+3.設定圖示(需先設定機器人圖示才會顯示內容)
 ![image](https://github.com/cindyyang21/genai_chatbot/blob/main/ReadMeImage/icon%E5%9C%96%E7%A4%BA.png?raw=true)
 # 
 ### 其他功能
