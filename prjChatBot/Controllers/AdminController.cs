@@ -6,6 +6,8 @@ using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.PixelFormats;
+using Microsoft.Extensions.Configuration;
+using System.Configuration;
 
 
 namespace prjChatBot.Controllers
@@ -14,11 +16,13 @@ namespace prjChatBot.Controllers
     {
         private readonly GeoDbContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IConfiguration _configuration;
 
-        public AdminController(GeoDbContext context, IWebHostEnvironment webHostEnvironment)
+        public AdminController(GeoDbContext context, IWebHostEnvironment webHostEnvironment, IConfiguration configuration)
         {
             _context = context;
             _webHostEnvironment = webHostEnvironment;
+            _configuration = configuration;
         }
 
 
@@ -1144,7 +1148,21 @@ namespace prjChatBot.Controllers
             }
         }
 
-
+        [HttpGet]
+        public IActionResult GetChatbotSettings()
+        {
+            var url = _configuration["Chatbot:Url"]; // 從配置檔案或資料庫讀取 URL
+            var apiKey = _configuration["Chatbot:ApiKey"]; // 從配置檔案或資料庫讀取 API 金鑰
+            return Json(new { url, apiKey });
+        }
+        [HttpPost]
+        public IActionResult SaveChatbotSettings([FromBody] ChatbotSettings settings)
+        {
+            // 這裡可以將新的 URL 和 API 金鑰存到資料庫或配置檔案中
+            _configuration["Chatbot:Url"] = settings.Url;
+            _configuration["Chatbot:ApiKey"] = settings.ApiKey;
+            return Ok(new { success = true, message = "設定已儲存" });
+        }
 
     }
 }
