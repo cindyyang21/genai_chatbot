@@ -7,7 +7,7 @@
     ViewData["Title"] = "Home Page";
     Layout = null;
     // Extract color settings from the Header model (assuming colors are set in the model)
-    var backgroundColor = Model.ColorSelections?.FirstOrDefault()?.ColorCode ?? "#defaultColor";
+    var backgroundColor = Model.ColorSelections?.LastOrDefault()?.ColorCode ?? "#defaultColor";
 }
 
 
